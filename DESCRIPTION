@@ -1,0 +1,23 @@
+Package: WeightSetDecomp
+Title: Weight Set Decomposition Tools including weighted rank aggregation
+Version: 0.0.0.9000
+Authors@R: 
+    person("Tyler", "Perini", , "perini@usna.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "0000000285028111"))
+Description: Computes and plots the standardized (unit) weight set for various methods 
+              such as weighted rank aggregation, weighted sum scalarization, and 
+              weighted Tchebychev scalarization for multicriteria optimization. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+      ggplot2,
+      dplyr,
+      tidyverse,
+      plotly,
+      tictoc,
+      sp,
+      igraph
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3

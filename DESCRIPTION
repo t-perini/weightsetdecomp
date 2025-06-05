@@ -1,4 +1,4 @@
-Package: WeightSetDecomp
+Package: weightsetdecomp
 Title: Weight Set Decomposition Tools including weighted rank aggregation
 Version: 0.0.0.9000
 Authors@R: 

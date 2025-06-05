@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(WeightSetDecomp)
+library(weightsetdecomp)
 
-test_check("WeightSetDecomp")
+test_check("weightsetdecomp")

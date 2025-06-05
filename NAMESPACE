@@ -2,4 +2,6 @@
 
 export(equi_transform)
 export(flex_rank)
+export(plot_aggregation_grid)
+export(rank_aggregation_grid)
 export(weight_set)

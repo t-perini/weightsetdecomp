@@ -17,7 +17,7 @@
 #' Item.Label gives the order of items ranked from best-to-last. This is easier to interpret than Rank.Label.
 #' @export
 #' @examples 
-#' Lambda <- weight_set(0.5)
+#' Lambda <- weight_set(0.1)
 #' metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
 #' Lambda <- rank_aggregation_grid(Lambda,metrics)
 rank_aggregation_grid <- function(Lambda,metrics,ties=FALSE,show_bar=FALSE) {

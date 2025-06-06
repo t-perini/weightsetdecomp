@@ -4,12 +4,15 @@
 \alias{weight_set}
 \title{Initialize the data frame for weights in weight set}
 \usage{
-weight_set(stepsize = 0.01)
+weight_set(stepsize = 0.01, equilateral = TRUE)
 }
 \arguments{
 \item{stepsize}{The step size for the grid of equally spaced points.
 Smaller values will increase precision but requires more time for computation.
 Weights are between 0 and 1 with sum of 1.}
+
+\item{equilateral}{Binary to indicate whether or not to include the equilateral transformation
+as columns equilambda1 and equilambda2}
 }
 \value{
 A data frame where each row represents one grid point in the weight set.

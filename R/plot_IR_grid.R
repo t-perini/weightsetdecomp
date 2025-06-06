@@ -32,7 +32,7 @@
 #' @export
 #' 
 #' @examples 
-#' Lambda <- equi_transform(weight_set(0.01))
+#' Lambda <- weight_set(0.1)
 #' metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
 #' Lambda <- rank_aggregation_grid(Lambda,metrics)
 #' plot_IR_grid(Lambda,weight=c(0.2,0.2,0.6))
@@ -87,12 +87,12 @@ plot_IR_grid <- function(Lambda,weight=0,rank.label="",item.label="",triangle="e
     }
     # optional gray lines
     if(bias_axes) {
-      g <- g + ggplot2::geom_segment(aes(x = -0.5, y = 0, xend = 0.25, yend = 0.25*sqrt(3)), color="gray") + 
-        ggplot2::geom_segment(aes(x = 0.5, y = 0, xend = -0.25, yend = 0.25*sqrt(3)), color="gray") + 
-        ggplot2::geom_segment(aes(x = 0, y = 0, xend = 0, yend = 0.5*sqrt(3)), color="gray") + 
-        ggplot2::geom_segment(aes(x = -0.5, y = 0, xend = 0, yend = 0.5*sqrt(3)), color="black",linewidth=2) + 
-        ggplot2::geom_segment(aes(x = -0.5, y = 0, xend = 0.5, yend = 0), color="black",linewidth=2) + 
-        ggplot2::geom_segment(aes(x = 0, y = 0.5*sqrt(3), xend = 0.5, yend = 0), color="black",linewidth=2) 
+      g <- g + ggplot2::geom_segment(ggplot2::aes(x = -0.5, y = 0, xend = 0.25, yend = 0.25*sqrt(3)), color="gray") + 
+        ggplot2::geom_segment(ggplot2::aes(x = 0.5, y = 0, xend = -0.25, yend = 0.25*sqrt(3)), color="gray") + 
+        ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0, xend = 0, yend = 0.5*sqrt(3)), color="gray") + 
+        ggplot2::geom_segment(ggplot2::aes(x = -0.5, y = 0, xend = 0, yend = 0.5*sqrt(3)), color="black",linewidth=2) + 
+        ggplot2::geom_segment(ggplot2::aes(x = -0.5, y = 0, xend = 0.5, yend = 0), color="black",linewidth=2) + 
+        ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0.5*sqrt(3), xend = 0.5, yend = 0), color="black",linewidth=2) 
     }
     # optional axis and other labels
     if(annotations) {
@@ -102,9 +102,9 @@ plot_IR_grid <- function(Lambda,weight=0,rank.label="",item.label="",triangle="e
                           lab=c("r1", "r2", "r3"))
       pct=round(100*dim(subdf)[1]/dim(Lambda)[1],2)
       g <- g + 
-        ggplot2::geom_point(data=labels, aes(x=x, y=y),size=3) +
-        ggplot2::geom_text(data=labels, aes(x=x, y=y+deltay, label=lab))+
-        ggplot2::geom_label(aes(x=-0.5,y=0.5,label=paste("Area (%): ",pct))) +
+        ggplot2::geom_point(data=labels, ggplot2::aes(x=x, y=y),size=3) +
+        ggplot2::geom_text(data=labels, ggplot2::aes(x=x, y=y+deltay, label=lab))+
+        ggplot2::geom_label(ggplot2::aes(x=-0.5,y=0.5,label=paste("Area (%): ",pct))) +
         ggplot2::xlim(c(-0.6,0.6)) + 
         ggplot2::ylim(c(-0.05,0.95))
     }
@@ -121,12 +121,12 @@ plot_IR_grid <- function(Lambda,weight=0,rank.label="",item.label="",triangle="e
     }  
     # optional gray lines
     if(bias_axes) {
-      g <- g + ggplot2::geom_segment(aes(x = 0, y = 0, xend = 0.5, yend = 0.5), color="gray") + 
-        ggplot2::geom_segment(aes(x = 1, y = 0, xend = 0, yend = 0.5), color="gray") + 
-        ggplot2::geom_segment(aes(x = 0.5, y = 0, xend = 0, yend = 1), color="gray") + 
-        ggplot2::geom_segment(aes(x = 0, y = 0, xend = 0, yend = 1), color="black",linewidth=2) + 
-        ggplot2::geom_segment(aes(x = 0, y = 0, xend = 1, yend = 0), color="black",linewidth=2) + 
-        ggplot2::geom_segment(aes(x = 0, y = 1, xend = 1, yend = 0), color="black",linewidth=2) 
+      g <- g + ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0, xend = 0.5, yend = 0.5), color="gray") + 
+        ggplot2::geom_segment(ggplot2::aes(x = 1, y = 0, xend = 0, yend = 0.5), color="gray") + 
+        ggplot2::geom_segment(ggplot2::aes(x = 0.5, y = 0, xend = 0, yend = 1), color="gray") + 
+        ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0, xend = 0, yend = 1), color="black",linewidth=2) + 
+        ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0, xend = 1, yend = 0), color="black",linewidth=2) + 
+        ggplot2::geom_segment(ggplot2::aes(x = 0, y = 1, xend = 1, yend = 0), color="black",linewidth=2) 
     }
     # optional axis and other labels
     if(annotations) {
@@ -136,9 +136,9 @@ plot_IR_grid <- function(Lambda,weight=0,rank.label="",item.label="",triangle="e
                           lab=c("r1", "r2", "r3"))
       pct=round(100*dim(subdf)[1]/dim(Lambda)[1],2)
       g <- g + 
-        ggplot2::geom_point(data=labels, aes(x=x, y=y),size=3) +
-        ggplot2::geom_text(data=labels, aes(x=x, y=y+deltay, label=lab))+
-        ggplot2::geom_label(aes(x=0.75,y=0.75,label=paste("Area (%): ",pct))) +
+        ggplot2::geom_point(data=labels, ggplot2::aes(x=x, y=y),size=3) +
+        ggplot2::geom_text(data=labels, ggplot2::aes(x=x, y=y+deltay, label=lab))+
+        ggplot2::geom_label(ggplot2::aes(x=0.75,y=0.75,label=paste("Area (%): ",pct))) +
         ggplot2::xlim(c(-0.1,1.1)) + 
         ggplot2::ylim(c(-0.05,1.05))
     }

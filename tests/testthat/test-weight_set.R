@@ -1,5 +1,5 @@
 test_that("weight_set() generates correct size of df", {
-  expect_equal(dim(weight_set(0.5)), c(6,3))
+  expect_equal(dim(weight_set(0.5)), c(6,5))
 })
 
 test_that("weight_set() has every row sum = 1", {

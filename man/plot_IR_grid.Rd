@@ -57,7 +57,7 @@ fixable, and should be ignored. For ggplotly visual tool, use
 ggplotly(g,tooltip = 'text') to access these aesthetics as appropriate labels.
 }
 \examples{
-Lambda <- equi_transform(weight_set(0.01))
+Lambda <- weight_set(0.1)
 metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
 Lambda <- rank_aggregation_grid(Lambda,metrics)
 plot_IR_grid(Lambda,weight=c(0.2,0.2,0.6))

@@ -6,8 +6,9 @@
 #' 
 #' @param Lambda Data frame containing weight vectors and labels for weighted rank aggregations.
 #' Must include column names lambda1/2 for right triangle representation or 
-#' equilambda1/2 for equilateral triangle representation. 
-#' Must include column name Label for the string/factor identifier of the rank aggregation. 
+#' equilambda1/2 for equilateral triangle representation.
+#' @param by Column name for the string/factor identifier of the rank aggregation. 
+#' Most common: Rank.Label, Item.Label, or TopAlpha 
 #' @param triangle Specify whether the right triangle representation ("right") or the 
 #' equilateral triangle representation ("equilateral"). Note that the equilateral triangle
 #' representation is recommended as it is unbiased, and the right triangle representation is 
@@ -23,27 +24,31 @@
 #' @export
 #' 
 #' @examples 
-#' Lambda <- equi_transform(weight_set(0.01))
+#' Lambda <- weight_set(0.1)
 #' metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
 #' Lambda <- rank_aggregation_grid(Lambda,metrics)
 #' plot_aggregation_grid(Lambda)
-#' g <- plot_aggregation_grid(Lambda)
+#' g <- plot_aggregation_grid(Lambda,by='Item.Label')
 #' g
 #' plot_aggregation_grid(Lambda,triangle='right',bias_axes=FALSE,annotations=FALSE)
 #' g <- plot_aggregation_grid(Lambda,plotly_text = TRUE)
 #' plotly::ggplotly(g, tooltip='text')
-plot_aggregation_grid <- function(Lambda,triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE) {
+plot_aggregation_grid <- function(Lambda,by='Rank.Label',triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE) {
+  # find column id of the chosen column and relabel for graphing purposes
+  colid = which(colnames(Lambda)==by)
+  colnames(Lambda)[colid]='label'
+  Lambda$label <- randomize_labels(Lambda$label)
   # initial ggplot structure with theme
   g <- ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::theme(legend.position="none") 
   # Option 1: Equilateral transformation
   if(tolower(triangle)=="equilateral") {
     if(plotly_text) { # optional plotly text as part of aes()
       g <- g + 
-        ggplot2::geom_point(data=Lambda, ggplot2::aes(x=equilambda1,y=equilambda2,color=Rank.Label,
-                                           text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\nrank:",Rank.Label))) 
+        ggplot2::geom_point(data=Lambda, ggplot2::aes(x=equilambda1,y=equilambda2,color=label, #Rank.Label,
+                                           text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\n",by,":",label))) 
     } else {
       g <- g + 
-        ggplot2::geom_point(data=Lambda, ggplot2::aes(x=equilambda1,y=equilambda2,color=Rank.Label)) 
+        ggplot2::geom_point(data=Lambda, ggplot2::aes(x=equilambda1,y=equilambda2,color=label)) 
     }
     # optional gray lines
     if(bias_axes) {
@@ -72,11 +77,11 @@ plot_aggregation_grid <- function(Lambda,triangle="equilateral",bias_axes=TRUE,a
   if(tolower(triangle)=="right") {
     if(plotly_text) { # optional plotly text as part of aes()
       g <- g + 
-        ggplot2::geom_point(data=Lambda, ggplot2::aes(x=lambda1,y=lambda2,color=Rank.Label,
-                                           text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\nrank:",Rank.Label))) 
+        ggplot2::geom_point(data=Lambda, ggplot2::aes(x=lambda1,y=lambda2,color=label,
+                                           text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\n",by,":",label))) 
     } else {
       g <- g + 
-        ggplot2::geom_point(data=Lambda, ggplot2::aes(x=lambda1,y=lambda2,color=Rank.Label)) 
+        ggplot2::geom_point(data=Lambda, ggplot2::aes(x=lambda1,y=lambda2,color=label)) 
     }
     # optional gray lines
     if(bias_axes) {

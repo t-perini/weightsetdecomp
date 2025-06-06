@@ -10,17 +10,20 @@
 #' 
 #' @param stepsize The step size for the grid of equally spaced points. 
 #' Smaller values will increase precision but requires more time for computation. 
-#' Weights are between 0 and 1 with sum of 1.  
+#' Weights are between 0 and 1 with sum of 1. 
+#' @param equilateral Binary to indicate whether or not to include the equilateral transformation
+#' as columns equilambda1 and equilambda2
 #' @return A data frame where each row represents one grid point in the weight set.
 #' @export 
 #' 
 #' @examples
 #' Lambda <- weight_set() 
-weight_set <- function(stepsize=0.01) {
+weight_set <- function(stepsize=0.01, equilateral=TRUE) {
   s = seq(0,1,stepsize)
   df = expand.grid(s,s)
   df = df[df$Var1+df$Var2<=1,]
   Lambda = data.frame(lambda1=df$Var1, lambda2=df$Var2)
   Lambda$lambda3 = 1-Lambda$lambda1-Lambda$lambda2
+  if(equilateral) Lambda <- equi_transform(Lambda)
   return(Lambda)
 }

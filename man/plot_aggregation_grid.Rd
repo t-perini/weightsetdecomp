@@ -6,6 +6,7 @@
 \usage{
 plot_aggregation_grid(
   Lambda,
+  by = "Rank.Label",
   triangle = "equilateral",
   bias_axes = TRUE,
   annotations = TRUE,
@@ -15,8 +16,10 @@ plot_aggregation_grid(
 \arguments{
 \item{Lambda}{Data frame containing weight vectors and labels for weighted rank aggregations.
 Must include column names lambda1/2 for right triangle representation or
-equilambda1/2 for equilateral triangle representation.
-Must include column name Label for the string/factor identifier of the rank aggregation.}
+equilambda1/2 for equilateral triangle representation.}
+
+\item{by}{Column name for the string/factor identifier of the rank aggregation.
+Most common: Rank.Label, Item.Label, or TopAlpha}
 
 \item{triangle}{Specify whether the right triangle representation ("right") or the
 equilateral triangle representation ("equilateral"). Note that the equilateral triangle
@@ -42,11 +45,11 @@ a string label. The strings are concatenations of the elements in order from bes
 separated by periods.
 }
 \examples{
-Lambda <- equi_transform(weight_set(0.01))
+Lambda <- weight_set(0.1)
 metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
 Lambda <- rank_aggregation_grid(Lambda,metrics)
 plot_aggregation_grid(Lambda)
-g <- plot_aggregation_grid(Lambda)
+g <- plot_aggregation_grid(Lambda,by='Item.Label')
 g
 plot_aggregation_grid(Lambda,triangle='right',bias_axes=FALSE,annotations=FALSE)
 g <- plot_aggregation_grid(Lambda,plotly_text = TRUE)

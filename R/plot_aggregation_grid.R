@@ -27,21 +27,25 @@
 #' metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
 #' Lambda <- rank_aggregation_grid(Lambda,metrics)
 #' plot_aggregation_grid(Lambda)
+#' g <- plot_aggregation_grid(Lambda)
+#' g
 #' plot_aggregation_grid(Lambda,triangle='right',bias_axes=FALSE,annotations=FALSE)
 #' g <- plot_aggregation_grid(Lambda,plotly_text = TRUE)
 #' plotly::ggplotly(g, tooltip='text')
 plot_aggregation_grid <- function(Lambda,triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE) {
+  # initial ggplot structure with theme
+  g <- ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::theme(legend.position="none") 
+  # Option 1: Equilateral transformation
   if(tolower(triangle)=="equilateral") {
-    if(plotly_text) {
-      g <- ggplot2::ggplot() + 
+    if(plotly_text) { # optional plotly text as part of aes()
+      g <- g + 
         ggplot2::geom_point(data=Lambda, ggplot2::aes(x=equilambda1,y=equilambda2,color=Rank.Label,
                                            text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\nrank:",Rank.Label))) 
     } else {
-      g <- ggplot2::ggplot() + 
+      g <- g + 
         ggplot2::geom_point(data=Lambda, ggplot2::aes(x=equilambda1,y=equilambda2,color=Rank.Label)) 
     }
-    g <- g + ggplot2::theme_void() + ggplot2::theme(legend.position="none") 
-    
+    # optional gray lines
     if(bias_axes) {
       g <- g + ggplot2::geom_segment(ggplot2::aes(x = -0.5, y = 0, xend = 0.25, yend = 0.25*sqrt(3)), color="gray") + 
         ggplot2::geom_segment(ggplot2::aes(x = 0.5, y = 0, xend = -0.25, yend = 0.25*sqrt(3)), color="gray") + 
@@ -50,6 +54,7 @@ plot_aggregation_grid <- function(Lambda,triangle="equilateral",bias_axes=TRUE,a
         ggplot2::geom_segment(ggplot2::aes(x = -0.5, y = 0, xend = 0.5, yend = 0), color="black",linewidth=2) + 
         ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0.5*sqrt(3), xend = 0.5, yend = 0), color="black",linewidth=2) 
     }
+    # optional axis and other labels
     if(annotations) {
       labels = data.frame(x=c(0.5,0,-0.5),
                           y=c(0,0.5*sqrt(3),0),
@@ -63,17 +68,17 @@ plot_aggregation_grid <- function(Lambda,triangle="equilateral",bias_axes=TRUE,a
         ggplot2::ylim(c(-0.05,0.95))
     }
   }
+  # Option 2: Right triangle
   if(tolower(triangle)=="right") {
-    if(plotly_text) {
-      g <- ggplot2::ggplot() + 
+    if(plotly_text) { # optional plotly text as part of aes()
+      g <- g + 
         ggplot2::geom_point(data=Lambda, ggplot2::aes(x=lambda1,y=lambda2,color=Rank.Label,
                                            text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\nrank:",Rank.Label))) 
     } else {
-      g <- ggplot2::ggplot() + 
+      g <- g + 
         ggplot2::geom_point(data=Lambda, ggplot2::aes(x=lambda1,y=lambda2,color=Rank.Label)) 
     }
-    g <- g + ggplot2::theme_void() + ggplot2::theme(legend.position="none") 
-    
+    # optional gray lines
     if(bias_axes) {
       g <- g + ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0, xend = 0.5, yend = 0.5), color="gray") + 
         ggplot2::geom_segment(ggplot2::aes(x = 1, y = 0, xend = 0, yend = 0.5), color="gray") + 
@@ -82,6 +87,7 @@ plot_aggregation_grid <- function(Lambda,triangle="equilateral",bias_axes=TRUE,a
         ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0, xend = 1, yend = 0), color="black",linewidth=2) + 
         ggplot2::geom_segment(ggplot2::aes(x = 0, y = 1, xend = 1, yend = 0), color="black",linewidth=2) 
     }
+    # optional axis and other labels
     if(annotations) {
       labels = data.frame(x=c(1,0,0),
                           y=c(0,1,0),
@@ -95,6 +101,5 @@ plot_aggregation_grid <- function(Lambda,triangle="equilateral",bias_axes=TRUE,a
         ggplot2::ylim(c(-0.05,1.05))
     }
   }
-  return(g) #Note: a warning about an uknown aesthetic (text) is expected and should be ignored.")
-  
+  return(g) 
 }

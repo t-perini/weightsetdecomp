@@ -22,14 +22,14 @@
 #' Lambda <- rank_aggregation_grid(Lambda,metrics)
 rank_aggregation_grid <- function(Lambda,metrics,ties=FALSE,show_bar=FALSE) {
   rows=dim(Lambda)[1]
-  if(show_bar) {
+  if(show_bar) {# optional progress bar using utils
     print(paste("This may take some time. Weights to compute:",rows,". Estimated time:",round(0.00038*rows,1),"seconds."))
     pb <- utils::txtProgressBar(width=20,style=3)
   } 
   Lambda$Rank.Label = ""
   Lambda$Item.Label = ""
-  dim=dim(metrics)[2]
   for(i in 1:rows) {
+    # for every weight (row) in Lambda compute weighted sum of metrics, then rank and store labels
     rating = Lambda$lambda1[i]*metrics[,1] + Lambda$lambda2[i]*metrics[,2] + Lambda$lambda3[i]*metrics[,3]
     rr = flex_rank(rating, ties)
     Lambda$Rank.Label[i] = paste(rr,collapse = ".")
@@ -40,6 +40,7 @@ rank_aggregation_grid <- function(Lambda,metrics,ties=FALSE,show_bar=FALSE) {
     utils::setTxtProgressBar(pb, 1)
     close(pb)
   }
+  # replace strings with factors
   Lambda$Rank.Label <- as.factor(Lambda$Rank.Label)
   Lambda$Item.Label <- as.factor(Lambda$Item.Label)
   return(Lambda)

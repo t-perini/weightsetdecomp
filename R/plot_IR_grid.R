@@ -28,6 +28,7 @@
 #' feature which is intended to be used by the ggplotly interactive library. The warning is not
 #' fixable, and should be ignored. For ggplotly visual tool, use 
 #' ggplotly(g,tooltip = 'text') to access these aesthetics as appropriate labels.
+#' @param leg.pos Input for ggplot legend positioning, e.g. 'bottom', 'right', or c(0.8,0.8)
 #' @return A ggplot structure which can be plotted directly.  
 #' @export
 #' 
@@ -42,9 +43,9 @@
 #' plot_IR_grid(Lambda,weight=c(0.2,0.2,0.6),triangle='right',bias_axes=FALSE,annotations=FALSE)
 #' g <- plot_IR_grid(Lambda,weight=c(0.2,0.2,0.6),plotly_text = TRUE)
 #' plotly::ggplotly(g, tooltip='text')
-plot_IR_grid <- function(Lambda,weight=0,rank.label="",item.label="",triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE) {
+plot_IR_grid <- function(Lambda,weight=0,rank.label="",item.label="",triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE,leg.pos='none') {
   # initial ggplot structure with theme
-  g <- ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::theme(legend.position="none") 
+  g <- ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::theme(legend.position=leg.pos) 
   # check for missing input params
   if(length(weight)+nchar(rank.label)+nchar(item.label)==0) {
     print("No selection criteria input. Include either chosenweight or chosenorder.")

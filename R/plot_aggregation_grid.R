@@ -20,6 +20,7 @@
 #' feature which is intended to be used by the ggplotly interactive library. The warning is not
 #' fixable, and should be ignored. For ggplotly visual tool, use 
 #' ggplotly(g,tooltip = 'text') to access these aesthetics as appropriate labels.
+#' @param leg.pos Input for ggplot legend positioning, e.g. 'bottom', 'right', or c(0.8,0.8)
 #' @return A ggplot structure which can be plotted directly.  
 #' @export
 #' 
@@ -33,13 +34,13 @@
 #' plot_aggregation_grid(Lambda,triangle='right',bias_axes=FALSE,annotations=FALSE)
 #' g <- plot_aggregation_grid(Lambda,plotly_text = TRUE)
 #' plotly::ggplotly(g, tooltip='text')
-plot_aggregation_grid <- function(Lambda,by='Rank.Label',triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE) {
+plot_aggregation_grid <- function(Lambda,by='Rank.Label',triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE,leg.pos='none') {
   # find column id of the chosen column and relabel for graphing purposes
   colid = which(colnames(Lambda)==by)
   colnames(Lambda)[colid]='label'
   Lambda$label <- randomize_labels(Lambda$label)
   # initial ggplot structure with theme
-  g <- ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::theme(legend.position="none") 
+  g <- ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::theme(legend.position=leg.pos) 
   # Option 1: Equilateral transformation
   if(tolower(triangle)=="equilateral") {
     if(plotly_text) { # optional plotly text as part of aes()

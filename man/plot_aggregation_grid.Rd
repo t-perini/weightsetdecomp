@@ -10,7 +10,8 @@ plot_aggregation_grid(
   triangle = "equilateral",
   bias_axes = TRUE,
   annotations = TRUE,
-  plotly_text = FALSE
+  plotly_text = FALSE,
+  leg.pos = "none"
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ Note that a warning will occur about an "unknown aesthetics" (text); this is a
 feature which is intended to be used by the ggplotly interactive library. The warning is not
 fixable, and should be ignored. For ggplotly visual tool, use
 ggplotly(g,tooltip = 'text') to access these aesthetics as appropriate labels.}
+
+\item{leg.pos}{Input for ggplot legend positioning, e.g. 'bottom', 'right', or c(0.8,0.8)}
 }
 \value{
 A ggplot structure which can be plotted directly.

@@ -1,7 +1,7 @@
-#' Plot one indifference region for the grid search
+#' Plot one top-alpha region for the grid search
 #' 
-#' Input either known ranked order (as a string, separated by periods) or a weight vector.
-#' The indifference region for the given ranked order (or containing the weight vector) 
+#' Input either a top-alpha string (items separated by periods) or a weight vector.
+#' The top-alpha region for the given ranked order (or containing the weight vector) 
 #' will be plotted in the weight set. 
 #' 
 #' @param Lambda Data frame containing weight vectors and labels for weighted rank aggregations.
@@ -9,9 +9,7 @@
 #' equilambda1/2 for equilateral triangle representation. 
 #' Must include column name Label for the string/factor identifier of the rank aggregation.
 #' @param weight Weight vector identifying the indifference region to plot. 
-#' @param rank.label The string identifying the indifference region to plot. 
-#' This should be a string with the indices separated by periods. 
-#' @param item.label The order of items identifying the indifference region to plot. 
+#' @param top.alpha The string identifying the top-alpha items. 
 #' This should be a string with the indices separated by periods. 
 #' @param triangle Specify whether the right triangle representation ("right") or the 
 #' equilateral triangle representation ("equilateral"). Note that the equilateral triangle
@@ -24,27 +22,22 @@
 #' feature which is intended to be used by the ggplotly interactive library. The warning is not
 #' fixable, and should be ignored. For ggplotly visual tool, use 
 #' ggplotly(g,tooltip = 'text') to access these aesthetics as appropriate labels.
-#' @param leg.pos Input for ggplot legend positioning, e.g. 'bottom', 'right', or c(0.8,0.8)
 #' @return A ggplot structure which can be plotted directly.  
 #' @export
 #' 
 #' @examples 
-#' Lambda <- weight_set(0.1)
-#' metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
-#' Lambda <- rank_aggregation_grid(Lambda,metrics)
-#' plot_IR_grid(Lambda,weight=c(0.2,0.2,0.6))
-#' plot_IR_grid(Lambda,rank.label='1.2.3.4')
-#' g <- plot_IR_grid(Lambda,item.label='1.3.2.4')
-#' g
-#' plot_IR_grid(Lambda,weight=c(0.2,0.2,0.6),triangle='right',bias_axes=FALSE,annotations=FALSE)
-#' g <- plot_IR_grid(Lambda,weight=c(0.2,0.2,0.6),plotly_text = TRUE)
-#' plotly::ggplotly(g, tooltip='text')
-plot_IR_grid <- function(Lambda,weight=0,rank.label="",item.label="",triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE,leg.pos='none') {
+#' Lambda <- weight_set(0.011)
+#' metrics <- data.frame('cost'=c(10,20,30,40,50), 
+#'            'time'=c(5.9, 3.3, 2.5, 4.1, 1.8), 'risk'=c(1,4,3,2,5))
+#' Lambda <- rank_topalpha_grid(Lambda, alpha=3, metrics=metrics)
+#' plot_topalpha_IR_grid(Lambda,weight=c(0.33,0.33,0.33))
+#' plot_topalpha_IR_grid(Lambda,top.alpha='1.3.4')
+plot_topalpha_IR_grid <- function(Lambda,weight=0,top.alpha="",triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE) {
   # initial ggplot structure with theme
-  g <- ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::theme(legend.position=leg.pos) 
+  g <- ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::theme(legend.position='none') 
   # check for missing input params
-  if(length(weight)+nchar(rank.label)+nchar(item.label)==0) {
-    print("No selection criteria input. Include weight, rank.label, or item.label")
+  if(length(weight)+nchar(top.alpha)==0) {
+    print("No selection criteria input. Include either weight or top.alpha")
     return(g)
   }
   # if a weight vector is given, find the nearest weight to filter Lambda df
@@ -54,33 +47,25 @@ plot_IR_grid <- function(Lambda,weight=0,rank.label="",item.label="",triangle="e
                          d3=(Lambda$lambda3-weight[3])^2)
     dist_df$dist=dist_df$d1+dist_df$d2+dist_df$d3
     ind = which(dist_df$dist==min(dist_df$dist))
-    subdf <- subset(Lambda,Rank.Label==Lambda$Rank.Label[ind])
+    subdf <- subset(Lambda,TopAlpha==Lambda$TopAlpha[ind])
   }
   # if a rank vector is given, then use it to filter Lambda df
-  if(nchar(rank.label)>0) {
-    if(!any(Lambda$Rank.Label==rank.label)) {
-      print("rank.label is not found in Lambda$Rank.Label")
+  if(nchar(top.alpha)>0) {
+    if(!any(Lambda$TopAlpha==top.alpha)) {
+      print("top.alpha is not found in Lambda$TopAlpha")
       return(g)
     }
-    subdf <- subset(Lambda,Rank.Label==rank.label)
-  }
-  # if an item ordering is given, then use it to filter Lambda df
-  if(nchar(item.label)>0) {
-    if(!any(Lambda$Item.Label==item.label)) {
-      print("item.label is not found in Lambda$Item.Label")
-      return(g)
-    }
-    subdf <- subset(Lambda,Item.Label==item.label)
+    subdf <- subset(Lambda,TopAlpha==top.alpha)
   }
   # Option 1: Equilateral transformation
   if(tolower(triangle)=="equilateral") {
     if(plotly_text) { # optional plotly text as part of aes()
       g <- g + 
-        ggplot2::geom_point(data=subdf, ggplot2::aes(x=equilambda1,y=equilambda2,color=Rank.Label,
-                                                      text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\nrank:",Rank.Label))) 
+        ggplot2::geom_point(data=subdf, ggplot2::aes(x=equilambda1,y=equilambda2,color=TopAlpha,
+                                                     text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\nrank:",TopAlpha))) 
     } else {
       g <- g + 
-        ggplot2::geom_point(data=subdf, ggplot2::aes(x=equilambda1,y=equilambda2,color=Rank.Label)) 
+        ggplot2::geom_point(data=subdf, ggplot2::aes(x=equilambda1,y=equilambda2,color=TopAlpha)) 
     }
     # optional gray lines
     if(bias_axes) {
@@ -109,12 +94,12 @@ plot_IR_grid <- function(Lambda,weight=0,rank.label="",item.label="",triangle="e
   # Option 2: Right triangle
   if(tolower(triangle)=="right") {
     if(plotly_text) { # optional plotly text as part of aes()
-        g <- g + 
-          ggplot2::geom_point(data=subdf, ggplot2::aes(x=lambda1,y=lambda2,color=Rank.Label,
-                                                        text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\nrank:",Rank.Label))) 
+      g <- g + 
+        ggplot2::geom_point(data=subdf, ggplot2::aes(x=lambda1,y=lambda2,color=TopAlpha,
+                                                     text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\nrank:",TopAlpha))) 
     } else {
       g <- g + 
-        ggplot2::geom_point(data=subdf, ggplot2::aes(x=lambda1,y=lambda2,color=Rank.Label)) 
+        ggplot2::geom_point(data=subdf, ggplot2::aes(x=lambda1,y=lambda2,color=TopAlpha)) 
     }  
     # optional gray lines
     if(bias_axes) {

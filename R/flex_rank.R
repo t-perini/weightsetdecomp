@@ -10,9 +10,9 @@
 #' @export
 #'
 #' @examples
-#' run_times <- c(5.3, 6.8, 2.1, 2.1, 3.4)
-#' flex_rank(run_times)
-#' flex_rank(run_times,ties=TRUE)
+#' risk <- c(1.0,  2.0,  3.1,  2.0,  1.7)
+#' flex_rank(risk)
+#' flex_rank(risk,ties=TRUE)
 flex_rank <- function(vec,ties=FALSE) {
   if(ties==FALSE) {
     return(rank(vec, ties.method="first"))

@@ -20,7 +20,7 @@ allow for ties, so in the case of a tie, it is broken by order of indices. The a
 method allows for ties, and it is computed by the number of smaller values.
 }
 \examples{
-run_times <- c(5.3, 6.8, 2.1, 2.1, 3.4)
-flex_rank(run_times)
-flex_rank(run_times,ties=TRUE)
+risk <- c(1.0,  2.0,  3.1,  2.0,  1.7)
+flex_rank(risk)
+flex_rank(risk,ties=TRUE)
 }

@@ -20,7 +20,7 @@
 #' Lambda <- weight_set(0.1)
 #' rankdf <- data.frame('rank1'=c(1,2,3,4,5), 
 #'            'rank2'=c(2,3,1,5,4), 'rank3'=c(3,1,5,4,2))
-#' Lambda <- Lambda <- rank_aggregation_grid(Lambda,rankdf)
+#' Lambda <- rank_aggregation_grid(Lambda,rankdf)
 #' inputlist <- rank_decomposition_exact(rankdf,Lambda)
 rank_decomposition_exact <- function(input_data,Lambda,show_bar=FALSE) {
   # Step 1: Compare items pair-wise to compute line segments

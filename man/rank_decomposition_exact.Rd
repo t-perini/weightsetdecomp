@@ -4,11 +4,15 @@
 \alias{rank_decomposition_exact}
 \title{Exact decomposition algorithm for rank aggregations}
 \usage{
-rank_decomposition_exact(input_data, Lambda, show_bar = FALSE)
+rank_decomposition_exact(input_data, Lambda, alpha = NaN, show_bar = FALSE)
 }
 \arguments{
 \item{input_data}{Data frame containing 3 columns of ranks/ratings per item.
 Each row represents one item.}
+
+\item{Lambda}{}
+
+\item{alpha}{The value for alpha if computing top-alpha regions}
 
 \item{show_bar}{Boolean for a progress bar and time data printed in console}
 }
@@ -34,4 +38,6 @@ rankdf <- data.frame('rank1'=c(1,2,3,4,5),
            'rank2'=c(2,3,1,5,4), 'rank3'=c(3,1,5,4,2))
 Lambda <- rank_aggregation_grid(Lambda,rankdf)
 inputlist <- rank_decomposition_exact(rankdf,Lambda)
+Lambda <- rank_topalpha_grid(Lambda,alpha=3,rankdf)
+inputlist <- rank_decomposition_exact(rankdf,Lambda,alpha=3)
 }

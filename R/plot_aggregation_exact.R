@@ -27,6 +27,9 @@
 #' plot_aggregation_exact(Lambda,inputlist)
 #' plot_aggregation_exact(Lambda,inputlist,
 #'     with_lines=TRUE,with_points=TRUE,plotly_text=FALSE,leg.pos='bottom')
+#' Lambda <- rank_topalpha_grid(Lambda, alpha=3, metrics=metrics)
+#' inputlist <- rank_decomposition_exact(rankdf,Lambda,alpha=3)
+#' plot_aggregation_exact(Lambda,inputlist,with_lines=FALSE,leg.pos='bottom')
 plot_aggregation_exact <- function(Lambda,inputlist,with_lines=TRUE,with_points=FALSE,plotly_text=FALSE,leg.pos='none') {
   Linedf = inputlist[[1]]
   IntersectPts = inputlist[[2]]

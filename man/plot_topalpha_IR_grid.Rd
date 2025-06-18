@@ -53,6 +53,6 @@ Lambda <- weight_set(0.011)
 metrics <- data.frame('cost'=c(10,20,30,40,50), 
            'time'=c(5.9, 3.3, 2.5, 4.1, 1.8), 'risk'=c(1,4,3,2,5))
 Lambda <- rank_topalpha_grid(Lambda, alpha=3, metrics=metrics)
-plot_topalpha_IR_grid(Lambda,weight=c(0.33,0.33,0.33))
+plot_topalpha_IR_grid(Lambda,weight=c(0.33,0.33,0.33),triangle='right')
 plot_topalpha_IR_grid(Lambda,top.alpha='1.3.4')
 }

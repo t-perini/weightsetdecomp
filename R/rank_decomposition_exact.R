@@ -11,6 +11,8 @@
 #' 
 #' @param input_data Data frame containing 3 columns of ranks/ratings per item. 
 #' Each row represents one item. 
+#' @param Lambda 
+#' @param alpha The value for alpha if computing top-alpha regions
 #' @param show_bar Boolean for a progress bar and time data printed in console
 #' @return An extended data frame with column for TopAlpha, which are factors (of strings) that list 
 #' the top ranked items (ordered numerically not by rank)
@@ -22,13 +24,15 @@
 #'            'rank2'=c(2,3,1,5,4), 'rank3'=c(3,1,5,4,2))
 #' Lambda <- rank_aggregation_grid(Lambda,rankdf)
 #' inputlist <- rank_decomposition_exact(rankdf,Lambda)
-rank_decomposition_exact <- function(input_data,Lambda,show_bar=FALSE) {
+#' Lambda <- rank_topalpha_grid(Lambda,alpha=3,rankdf)
+#' inputlist <- rank_decomposition_exact(rankdf,Lambda,alpha=3)
+rank_decomposition_exact <- function(input_data,Lambda,alpha=NaN,show_bar=FALSE) {
   # Step 1: Compare items pair-wise to compute line segments
   Linedf = decomposition_linesegs(rankdf,show_bar)
   # Step 2: Compare line segments pair-wise to compute intersections
   IntersectPts = decomposition_intersections(Linedf,show_bar)
   # Step 3: Label intersection points by rank labels to be extreme points
-  IRextremepts = decomposition_assignranks(rankdf,IntersectPts,Lambda,show_bar)
+  IRextremepts = decomposition_assignranks(rankdf,IntersectPts,Lambda,alpha=alpha,show_bar)
   # Step 4: Construct the convex hull for each indifference region
   IR_hull <- IRextremepts %>%
     dplyr::group_by(Rank.Label) %>%

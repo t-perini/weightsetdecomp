@@ -4,7 +4,13 @@
 \alias{decomposition_assignranks}
 \title{Assigned rank labels to points for exact rank aggregation decomposition}
 \usage{
-decomposition_assignranks(input_data, pointdf, Lambda, show_bar = FALSE)
+decomposition_assignranks(
+  input_data,
+  pointdf,
+  Lambda,
+  alpha = NaN,
+  show_bar = FALSE
+)
 }
 \arguments{
 \item{input_data}{Data frame containing 3 columns of ranks/ratings per item.
@@ -15,6 +21,8 @@ with two columns (x and y) where each row gives a point in the weight set.}
 
 \item{Lambda}{Data frame from \link{rank_aggregation_grid} including weights and ranked labels}
 
+\item{alpha}{The value for alpha if computing top-alpha regions}
+
 \item{show_bar}{Boolean for a progress bar and time data printed in console}
 }
 \value{
@@ -22,17 +30,20 @@ A data frame of three columns (lambda1, lambda2, and Rank.Label) for all points 
 indifference region.
 }
 \description{
-Every point is labeled with a valid rank label from grid search.
+Every point is labeled with a valid rank label from grid search (either full rank.label or topalpha).
 Step 3 of \link{rank_decomposition_exact}.
-Correctness depends on the completeness of the Rank.Label list from \link{rank_aggregation_grid},
+Correctness depends on the completeness of the Rank.Label list from \link{rank_aggregation_grid}
+or TopAlpha list form \link{rank_topalpha_grid},
 which may require recomputing with finer step size.
 }
 \examples{
 Lambda <- weight_set(0.1)
 rankdf <- data.frame('rank1'=c(1,2,3,4,5), 
            'rank2'=c(2,3,1,5,4), 'rank3'=c(3,1,5,4,2))
-Lambda <- Lambda <- rank_aggregation_grid(Lambda,rankdf)
+Lambda <- rank_aggregation_grid(Lambda,rankdf)
 Linedf = decomposition_linesegs(rankdf)
 IntersectPts = decomposition_intersections(Linedf)
 IRextremepts = decomposition_assignranks(rankdf,IntersectPts,Lambda)
+Lambda <- rank_topalpha_grid(Lambda,alpha=3,rankdf)
+IRextremepts = decomposition_assignranks(rankdf,IntersectPts,Lambda,alpha=3)
 }

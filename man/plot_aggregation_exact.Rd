@@ -48,4 +48,7 @@ inputlist <- rank_decomposition_exact(rankdf,Lambda)
 plot_aggregation_exact(Lambda,inputlist)
 plot_aggregation_exact(Lambda,inputlist,
     with_lines=TRUE,with_points=TRUE,plotly_text=FALSE,leg.pos='bottom')
+Lambda <- rank_topalpha_grid(Lambda, alpha=3, metrics=metrics)
+inputlist <- rank_decomposition_exact(rankdf,Lambda,alpha=3)
+plot_aggregation_exact(Lambda,inputlist,with_lines=FALSE,leg.pos='bottom')
 }

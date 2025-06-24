@@ -10,7 +10,7 @@ rank_decomposition_exact(input_data, Lambda, alpha = NaN, show_bar = FALSE)
 \item{input_data}{Data frame containing 3 columns of ranks/ratings per item.
 Each row represents one item.}
 
-\item{Lambda}{}
+\item{Lambda}{A data frame where each row represents one grid point in the weight set.}
 
 \item{alpha}{The value for alpha if computing top-alpha regions}
 
@@ -39,5 +39,5 @@ rankdf <- data.frame('rank1'=c(1,2,3,4,5),
 Lambda <- rank_aggregation_grid(Lambda,rankdf)
 inputlist <- rank_decomposition_exact(rankdf,Lambda)
 Lambda <- rank_topalpha_grid(Lambda,alpha=3,rankdf)
-inputlist <- rank_decomposition_exact(rankdf,Lambda,alpha=3)
+inputlist <- rank_decomposition_exact(rankdf,Lambda,alpha=3,show_bar=TRUE)
 }

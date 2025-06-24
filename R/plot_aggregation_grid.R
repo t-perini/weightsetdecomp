@@ -8,7 +8,7 @@
 #' Must include column names lambda1/2 for right triangle representation or 
 #' equilambda1/2 for equilateral triangle representation.
 #' @param by Column name for the string/factor identifier of the rank aggregation. 
-#' Most common: Rank.Label, Item.Label, or TopAlpha 
+#' Most common: Rank.Label, Item.Label, TopAlpha, or Budget
 #' @param triangle Specify whether the right triangle representation ("right") or the 
 #' equilateral triangle representation ("equilateral"). Note that the equilateral triangle
 #' representation is recommended as it is unbiased, and the right triangle representation is 
@@ -25,13 +25,15 @@
 #' @export
 #' 
 #' @examples 
-#' Lambda <- weight_set(0.1)
+#' Lambda <- weight_set(0.01)
 #' metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
 #' Lambda <- rank_aggregation_grid(Lambda,metrics)
 #' plot_aggregation_grid(Lambda)
 #' g <- plot_aggregation_grid(Lambda,by='Item.Label')
 #' g
 #' plot_aggregation_grid(Lambda,triangle='right',bias_axes=FALSE,annotations=FALSE)
+#' Lambda <- rank_topalpha_grid(Lambda,alpha=3,metrics)
+#' plot_aggregation_grid(Lambda,by='TopAlpha')
 #' g <- plot_aggregation_grid(Lambda,plotly_text = TRUE)
 #' plotly::ggplotly(g, tooltip='text')
 plot_aggregation_grid <- function(Lambda,by='Rank.Label',triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE,leg.pos='none') {
@@ -69,7 +71,7 @@ plot_aggregation_grid <- function(Lambda,by='Rank.Label',triangle="equilateral",
       g <- g + 
         ggplot2::geom_point(data=labels, ggplot2::aes(x=x, y=y),size=3) +
         ggplot2::geom_text(data=labels, ggplot2::aes(x=x, y=y+deltay, label=lab))+
-        ggplot2::geom_label(ggplot2::aes(x=-0.5,y=0.5,label=paste("Total:",length(levels(Lambda$Rank.Label))))) +
+        ggplot2::geom_label(ggplot2::aes(x=-0.5,y=0.5,label=paste("Total:",length(levels(Lambda$label))))) +
         ggplot2::xlim(c(-0.6,0.6)) + 
         ggplot2::ylim(c(-0.05,0.95))
     }
@@ -102,7 +104,7 @@ plot_aggregation_grid <- function(Lambda,by='Rank.Label',triangle="equilateral",
       g <- g + 
         ggplot2::geom_point(data=labels, ggplot2::aes(x=x, y=y),size=3) +
         ggplot2::geom_text(data=labels, ggplot2::aes(x=x, y=y+deltay, label=lab))+
-        ggplot2::geom_label(ggplot2::aes(x=0.75,y=0.75,label=paste("Total:",length(levels(Lambda$Rank.Label))))) +
+        ggplot2::geom_label(ggplot2::aes(x=0.75,y=0.75,label=paste("Total:",length(levels(Lambda$label))))) +
         ggplot2::xlim(c(-0.1,1.1)) + 
         ggplot2::ylim(c(-0.05,1.05))
     }

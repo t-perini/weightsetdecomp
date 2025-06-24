@@ -7,6 +7,7 @@
 #' equilambda1/2 for equilateral triangle representation. 
 #' Must include column name Label for the string/factor identifier of the rank aggregation.
 #' @param item The index for which item to represent.
+#' @param position Either string 'all' to illustrate all positions or a specific numeric
 #' @param triangle Specify whether the right triangle representation ("right") or the 
 #' equilateral triangle representation ("equilateral"). Note that the equilateral triangle
 #' representation is recommended as it is unbiased, and the right triangle representation is 
@@ -24,13 +25,15 @@
 #' @export
 #' 
 #' @examples 
-#' Lambda <- weight_set(0.1)
+#' Lambda <- weight_set(0.01)
 #' metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
 #' Lambda <- rank_aggregation_grid(Lambda,metrics)
 #' plot_position_grid(Lambda,item=1)
 #' g <- plot_position_grid(Lambda,item=1,leg.pos='bottom')
 #' g
-plot_position_grid <- function(Lambda,item,triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE,leg.pos='none') {
+#' plot_position_grid(Lambda,item=1,position=1)
+#' plot_position_grid(Lambda,item=1,position='all',triangle='right',leg.pos='bottom')
+plot_position_grid <- function(Lambda,item,position='all',triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE,leg.pos='none') {
   # initial ggplot structure with theme
   g <- ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::theme(legend.position=leg.pos) 
   # for every row in Lambda, parse and label the ranked position of item
@@ -41,18 +44,25 @@ plot_position_grid <- function(Lambda,item,triangle="equilateral",bias_axes=TRUE
   }
   #Lambda$Position <- as.factor(Lambda$Position)
   freq=Lambda %>% dplyr::count(Position, sort=TRUE)
-  most=freq$Position[1]
-  pct=round(100*sum(Lambda$Position==most)/dim(Lambda)[1],2)
+  if(position=='all') {
+    most=freq$Position[1]
+    pct=round(100*sum(Lambda$Position==most)/dim(Lambda)[1],2)
+    plotdf <- Lambda
+  } else {
+    pct=round(100*sum(Lambda$Position==position)/dim(Lambda)[1],2)
+    plotdf <- subset(Lambda,Position==position)
+  }
+  
   
   # Option 1: Equilateral transformation
   if(tolower(triangle)=="equilateral") {
     if(plotly_text) { # optional plotly text as part of aes()
       g <- g + 
-        ggplot2::geom_point(data=Lambda, ggplot2::aes(x=equilambda1,y=equilambda2,color=Position,
+        ggplot2::geom_point(data=plotdf, ggplot2::aes(x=equilambda1,y=equilambda2,color=Position,
                                                      text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\nposition:",Position))) 
     } else {
       g <- g + 
-        ggplot2::geom_point(data=Lambda, ggplot2::aes(x=equilambda1,y=equilambda2,color=Position)) 
+        ggplot2::geom_point(data=plotdf, ggplot2::aes(x=equilambda1,y=equilambda2,color=Position)) 
     }
     # optional gray lines
     if(bias_axes) {
@@ -72,20 +82,27 @@ plot_position_grid <- function(Lambda,item,triangle="equilateral",bias_axes=TRUE
       g <- g + 
         ggplot2::geom_point(data=labels, ggplot2::aes(x=x, y=y),size=3) +
         ggplot2::geom_text(data=labels, ggplot2::aes(x=x, y=y+deltay, label=lab))+
-        ggplot2::geom_label(ggplot2::aes(x=-0.5,y=0.5,label=paste("Most Common: ",most,"\n(", pct,"%)"))) +
         ggplot2::xlim(c(-0.6,0.6)) + 
         ggplot2::ylim(c(-0.05,0.95))
+      
+      if(position=='all') {
+        g <- g+ 
+          ggplot2::geom_label(ggplot2::aes(x=-0.5,y=0.5,label=paste("Most Common: ",most,"\n(", pct,"%)")))
+      } else {
+        g <- g+ 
+          ggplot2::geom_label(ggplot2::aes(x=-0.5,y=0.5,label=paste("Item: ",item,"\nPosition: ",position,"\n(", pct,"%)")))
+      }
     }
   }
   # Option 2: Right triangle
   if(tolower(triangle)=="right") {
     if(plotly_text) { # optional plotly text as part of aes()
       g <- g + 
-        ggplot2::geom_point(data=subdf, ggplot2::aes(x=lambda1,y=lambda2,color=Position,
+        ggplot2::geom_point(data=plotdf, ggplot2::aes(x=lambda1,y=lambda2,color=Position,
                                                      text=paste("lambda:",round(equilambda1,2),round(equilambda2,2),"\nposition:",Position))) 
     } else {
       g <- g + 
-        ggplot2::geom_point(data=subdf, ggplot2::aes(x=lambda1,y=lambda2,color=Position)) 
+        ggplot2::geom_point(data=plotdf, ggplot2::aes(x=lambda1,y=lambda2,color=Position)) 
     }  
     # optional gray lines
     if(bias_axes) {
@@ -105,14 +122,25 @@ plot_position_grid <- function(Lambda,item,triangle="equilateral",bias_axes=TRUE
       g <- g + 
         ggplot2::geom_point(data=labels, ggplot2::aes(x=x, y=y),size=3) +
         ggplot2::geom_text(data=labels, ggplot2::aes(x=x, y=y+deltay, label=lab))+
-        ggplot2::geom_label(ggplot2::aes(x=0.75,y=0.75,label=paste("Most Common: ",most,"\n", pct,"%"))) +
         ggplot2::xlim(c(-0.1,1.1)) + 
         ggplot2::ylim(c(-0.05,1.05))
+      
+      if(position=='all') {
+        g <- g+ 
+          ggplot2::geom_label(ggplot2::aes(x=0.75,y=0.75,label=paste("Most Common: ",most,"\n(", pct,"%)")))
+      } else {
+        g <- g+ 
+          ggplot2::geom_label(ggplot2::aes(x=0.75,y=0.75,label=paste("Item: ",item,"\nPosition: ",position,"\n(", pct,"%)")))
+      }
     }
   }
-  
-  g <- g+ ggplot2::scale_color_gradient2(low ="blue",mid = "white",high = "red",
-                         n.breaks = 1+max(Lambda$Position)-min(Lambda$Position))
+  # color gradient and legend
+  rg <- range(Lambda$Position)
+  g <- g+ ggplot2::scale_color_gradientn(colours = grDevices::terrain.colors(10),
+                          #gradient2()#low ="blue",mid = "white",high = "red",
+                         #n.breaks = 1+max(Lambda$Position)-min(Lambda$Position)
+                         breaks = c(rg[1],round(mean(rg)),rg[2])
+                         )
 
   return(g)
 }

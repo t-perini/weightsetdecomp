@@ -11,7 +11,7 @@
 #' 
 #' @param input_data Data frame containing 3 columns of ranks/ratings per item. 
 #' Each row represents one item. 
-#' @param Lambda 
+#' @param Lambda A data frame where each row represents one grid point in the weight set.
 #' @param alpha The value for alpha if computing top-alpha regions
 #' @param show_bar Boolean for a progress bar and time data printed in console
 #' @return An extended data frame with column for TopAlpha, which are factors (of strings) that list 
@@ -25,7 +25,7 @@
 #' Lambda <- rank_aggregation_grid(Lambda,rankdf)
 #' inputlist <- rank_decomposition_exact(rankdf,Lambda)
 #' Lambda <- rank_topalpha_grid(Lambda,alpha=3,rankdf)
-#' inputlist <- rank_decomposition_exact(rankdf,Lambda,alpha=3)
+#' inputlist <- rank_decomposition_exact(rankdf,Lambda,alpha=3,show_bar=TRUE)
 rank_decomposition_exact <- function(input_data,Lambda,alpha=NaN,show_bar=FALSE) {
   # Step 1: Compare items pair-wise to compute line segments
   Linedf = decomposition_linesegs(rankdf,show_bar)

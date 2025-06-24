@@ -23,7 +23,7 @@
 rank_aggregation_grid <- function(Lambda,metrics,ties=FALSE,show_bar=FALSE) {
   rows=dim(Lambda)[1]
   if(show_bar) {# optional progress bar using utils
-    print(paste("This may take some time. Weights to compute:",rows,". Estimated time:",round(0.00038*rows,1),"seconds."))
+    print(paste("This may take some time. Weights to compute:",rows,". Estimated time:",round(0.001*rows,1),"seconds."))
     pb <- utils::txtProgressBar(width=20,style=3)
   } 
   Lambda$Rank.Label = ""

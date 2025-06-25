@@ -1,0 +1,132 @@
+---
+title: "Ranking Examples"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(weightsetdecomp)
+```
+
+## Examples from Publication Perini 2025
+
+### Example 1.1
+
+By default, the flex_rank() function will break ties lexicographically, i.e.,  by order of index. The appropriate way to interpret the first output vector $r=[1, 3, 5, 4, 2]$ is the following: 
+
+* $r_1=1$ indicates that the first investment is ranked first; 
+* $r_2=3$ indicates that the second investment is in third place; 
+* $r_3=5$ indicates that the third investment is in last place; 
+* $r_4=4$ indicates that the fourth investment is in fourth place; and 
+* $r_5=2$ indicates that the final investment is in second place.
+
+In the weightsetdecomp library, this labeling will be referred to as _Rank.Label_. 
+
+```{r}
+risk <- c(1.0, 2.0, 3.1, 2.0, 1.7)
+flex_rank(risk)
+flex_rank(risk,ties=TRUE)
+```
+
+### Example 1.4
+
+The following functions compute the line segments between all pairs of investments and plots one desired line segment. For one incomparable pair $i,j\in[n]$, the line segment represents the intersection $H(i,j)\cap \Lambda$, which is described by its two endpoints.
+Computing all line segments results in the complete weight set decomposition. 
+
+```{r}
+Lambda <- weight_set(0.01)
+rankdf <- data.frame('risk1'=c(1,2,3,4,5), 
+           'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
+Lambda <- rank_aggregation_grid(Lambda,rankdf)
+outlist <- rank_decomposition_exact(metrics,Lambda)
+Linedf <- outlist[[1]]
+# First, compare investments 1 and 2
+plot_lineseg_grid(Lambda,Linedf,item_pair=c(1,2),
+    annotations=TRUE)
+# Second, compare investments 1 and 3
+plot_lineseg_grid(Lambda,Linedf,item_pair=c(1,3),
+    annotations=TRUE)
+# Finally, plot all line segments for the complete decomposition
+plot_aggregation_exact(Lambda,outlist,
+    with_lines=TRUE,with_points=TRUE,leg.pos='bottom')
+```
+
+### Example 1.5
+
+A tie is induced in the first scoring vector (``risk1'' column of rankdf). This results in the line segment having the corresponding vertex as an endpoint. 
+
+```{r}
+Lambda <- weight_set(0.01)
+rankdf <- data.frame('risk1'=c(1,1,3,4,5), 
+           'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
+Lambda <- rank_aggregation_grid(Lambda,rankdf)
+outlist <- rank_decomposition_exact(metrics,Lambda)
+Linedf <- outlist[[1]]
+# First, compare investments 1 and 2 (now with a tie)
+plot_lineseg_grid(Lambda,Linedf,item_pair=c(1,2),
+    annotations=TRUE)
+# Finally, plot all line segments for the complete decomposition
+plot_aggregation_exact(Lambda,outlist,
+    with_lines=TRUE,with_points=TRUE,leg.pos='bottom')
+```
+
+### Example 3.3
+
+When focusing on a single investment, the following functions plot the investment's ranked position for all weighted aggregations. 
+First, for a small portfolio of five investments, plot the ranked position of  investment 1. 
+Second, for a large portfolio of 1,000 investments, plot exactly where investment 1 is ranked in 434th position. 
+
+```{r}
+# First, for small portfolio
+Lambda <- weight_set(0.01)
+rankdf <- data.frame('risk1'=c(1,2,3,4,5), 
+           'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
+Lambda <- rank_aggregation_grid(Lambda,rankdf)
+plot_position_grid(Lambda, item=1,leg.pos='bottom')
+# Second, for large portfolio
+data("sampledf")
+Lambda <- rank_aggregation_grid(Lambda,sampledf)
+plot_position_grid(Lambda, item=1, position=434)
+```
+
+### Example 3.6
+
+Rather than distinguishing every indifference region by its full ranked order, identify only its top-$\alpha$-ranked investments. This is useful for large portfolios, as in this example with 1,000 investments.
+
+```{r}
+Lambda <- weight_set(0.01)
+data("sampledf")
+# First, for top-1 regions
+Lambda <- rank_topalpha_grid(Lambda,alpha=1,sampledf)
+plot_aggregation_grid(Lambda,by='TopAlpha',leg.pos = 'bottom')
+# Second, for top-10 regions
+Lambda <- rank_topalpha_grid(Lambda,alpha=10,sampledf)
+plot_aggregation_grid(Lambda,by='TopAlpha')
+```
+
+### Example 3.9
+
+It is possible to apply a simple filtering of a budget constraint where each investment has a given cost. For each indifference region, the investments are considered in ranked order and are ``purchased'' if it fits within the current budget. This represents a greedy approximate solution to the knapsack problem, so it may be suboptimal compared to the true knapsack solution. 
+
+```{r}
+Lambda <- weight_set(0.01)
+rankdf <- data.frame('risk1'=c(1,2,3,4,5), 
+           'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
+costs <-c(5.9, 4.4, 2.2, 5.5, 3.6) #sample(seq(2,6,0.1),5)
+Lambda <- rank_budget_grid(Lambda, costs, budget=10, metrics=rankdf)
+plot_aggregation_grid(Lambda,by='Budget',leg.pos='bottom')
+```
+
+
+
+

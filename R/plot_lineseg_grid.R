@@ -95,6 +95,45 @@ plot_lineseg_grid <- function(Lambda,Linedf,item_pair=c(1,2),triangle="right",an
     g <- g+ ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0, xend = 0, yend = 1), color="black",linewidth=2) + 
             ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0, xend = 1, yend = 0), color="black",linewidth=2) + 
             ggplot2::geom_segment(ggplot2::aes(x = 0, y = 1, xend = 1, yend = 0), color="black",linewidth=2) 
+  } else {
+    # Option 2: Equilateral triangle
+    # plot grid points colored by which item is better
+    g <- g + 
+      ggplot2::geom_point(data=Lambda, ggplot2::aes(x=lambda1,y=lambda2,color=AbetterthanB)) 
+    
+    # add the separating line segment from Linedf
+    g <- g + ggplot2::geom_segment(data=Linedf[ind,],
+                                   ggplot2::aes(x=bp1x,y=bp1y,xend=bp2x,yend=bp2y,group=label)) 
+    
+    # optional axis and other labels
+    if(annotations) {
+      # percentage of weights for extra labels
+      pct_df <- data.frame(x=c(mean(Lambda$lambda1[which(Lambda$AbetterthanB)]),
+                               mean(Lambda$lambda1[which(!Lambda$AbetterthanB)])),
+                           y=c(mean(Lambda$lambda2[which(Lambda$AbetterthanB)]),
+                               mean(Lambda$lambda2[which(!Lambda$AbetterthanB)])),
+                           pct=c(round(100*sum(Lambda$AbetterthanB)/dim(Lambda)[1],2),
+                                 round(100*sum(!Lambda$AbetterthanB)/dim(Lambda)[1],2)),
+                           item=c(A,B)
+      )
+      # standard labels
+      labels = data.frame(x=c(1,0,0),
+                          y=c(0,1,0),
+                          deltay=c(-0.05,0.05,-0.05),
+                          lab=c("r1", "r2", "r3"))
+      g <- g + 
+        ggplot2::geom_point(data=labels, ggplot2::aes(x=x, y=y),size=3) +
+        ggplot2::geom_text(data=labels, ggplot2::aes(x=x, y=y+deltay, label=lab))+
+        ggplot2::geom_text(data=pct_df,ggplot2::aes(x=x,y=y,label=paste(pct,"%\n",item,' better')),hjust=0.5) +
+        ggplot2::xlim(c(-0.1,1.1)) + 
+        ggplot2::ylim(c(-0.05,1.05))
+    }
+    # add standard outline
+    g <- g+ ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0, xend = 0, yend = 1), color="black",linewidth=2) + 
+      ggplot2::geom_segment(ggplot2::aes(x = 0, y = 0, xend = 1, yend = 0), color="black",linewidth=2) + 
+      ggplot2::geom_segment(ggplot2::aes(x = 0, y = 1, xend = 1, yend = 0), color="black",linewidth=2) 
   }
+  
+  
   return(g)
 }

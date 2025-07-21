@@ -21,6 +21,8 @@
 #' fixable, and should be ignored. For ggplotly visual tool, use 
 #' ggplotly(g,tooltip = 'text') to access these aesthetics as appropriate labels.
 #' @param leg.pos Input for ggplot legend positioning, e.g. 'bottom', 'right', or c(0.8,0.8)
+#' @param random.color Seed for randomizing colors based on label (for improved readability).
+#' 0 indicates no randomization.
 #' @return A ggplot structure which can be plotted directly.  
 #' @export
 #' 
@@ -36,11 +38,12 @@
 #' plot_aggregation_grid(Lambda,by='TopAlpha')
 #' g <- plot_aggregation_grid(Lambda,plotly_text = TRUE)
 #' plotly::ggplotly(g, tooltip='text')
-plot_aggregation_grid <- function(Lambda,by='Rank.Label',triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE,leg.pos='none') {
+plot_aggregation_grid <- function(Lambda,by='Rank.Label',triangle="equilateral",bias_axes=TRUE,annotations=TRUE,plotly_text=FALSE,leg.pos='none',random.color=1) {
   # find column id of the chosen column and relabel for graphing purposes
   colid = which(colnames(Lambda)==by)
   colnames(Lambda)[colid]='label'
-  Lambda$label <- randomize_labels(Lambda$label)
+  # optional: randomize order of labels for better readability
+  Lambda$label <- randomize_labels(Lambda$label,seed=random.color)
   # initial ggplot structure with theme
   g <- ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::theme(legend.position=leg.pos) 
   # Option 1: Equilateral transformation

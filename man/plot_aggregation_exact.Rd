@@ -7,10 +7,13 @@
 plot_aggregation_exact(
   Lambda,
   inputlist,
+  triangle = "equilateral",
   with_lines = TRUE,
   with_points = FALSE,
+  bias_axes = TRUE,
   plotly_text = FALSE,
-  leg.pos = "none"
+  leg.pos = "none",
+  random.color = 1
 )
 }
 \arguments{
@@ -19,9 +22,16 @@ Must include column names lambda1/2 for right triangle representation.}
 
 \item{inputlist}{List of 4 data frames from \link{rank_decomposition_exact}}
 
+\item{triangle}{Specify whether the right triangle representation ("right") or the
+equilateral triangle representation ("equilateral"). Note that the equilateral triangle
+representation is recommended as it is unbiased, and the right triangle representation is
+biased.}
+
 \item{with_lines}{Boolean for whether to add lines for Linedf}
 
 \item{with_points}{Boolean for whether to add points for IntersectPts}
+
+\item{bias_axes}{Boolean for whether to include bias axes in the graph}
 
 \item{plotly_text}{Boolean for whether to include text which is useful for plotly conversion.
 Note that a warning will occur about an "unknown aesthetics" (text); this is a
@@ -30,6 +40,9 @@ fixable, and should be ignored. For ggplotly visual tool, use
 ggplotly(g,tooltip = 'text') to access these aesthetics as appropriate labels.}
 
 \item{leg.pos}{Input for ggplot legend positioning, e.g. 'bottom', 'right', or c(0.8,0.8)}
+
+\item{random.color}{Seed for randomizing colors based on label (for improved readability).
+0 indicates no randomization.}
 }
 \value{
 A ggplot structure which can be plotted directly.
@@ -40,14 +53,14 @@ a string label. The strings are concatenations of the elements in order from bes
 separated by periods.
 }
 \examples{
-Lambda <- weight_set(0.1)
+Lambda <- weight_set(0.01)
 rankdf <- data.frame('rank1'=c(1,2,3,4,5), 
            'rank2'=c(2,3,1,5,4), 'rank3'=c(3,1,5,4,2))
-Lambda <- Lambda <- rank_aggregation_grid(Lambda,rankdf)
+Lambda <- rank_aggregation_grid(Lambda,rankdf)
 inputlist <- rank_decomposition_exact(rankdf,Lambda)
 plot_aggregation_exact(Lambda,inputlist)
 plot_aggregation_exact(Lambda,inputlist,
-    with_lines=TRUE,with_points=TRUE,plotly_text=FALSE,leg.pos='bottom')
+    with_lines=TRUE,with_points=TRUE,plotly_text=FALSE,leg.pos='bottom',random.color=0)
 Lambda <- rank_topalpha_grid(Lambda, alpha=3, metrics=metrics)
 inputlist <- rank_decomposition_exact(rankdf,Lambda,alpha=3)
 plot_aggregation_exact(Lambda,inputlist,with_lines=FALSE,leg.pos='bottom')

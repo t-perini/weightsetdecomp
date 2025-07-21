@@ -4,10 +4,12 @@
 \alias{randomize_labels}
 \title{Randomize the order of levels of a factor for better color separation in graphs}
 \usage{
-randomize_labels(label)
+randomize_labels(label, seed = 0)
 }
 \arguments{
 \item{label}{Column or array of labels, e.g., Rank.Label or Item.Label}
+
+\item{seed}{0 to indicate no randomization, otherwise the seed for randomization}
 }
 \value{
 Array of same labels but as a factor with the levels randomly shuffled

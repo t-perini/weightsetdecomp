@@ -20,7 +20,8 @@ Imports:
       tictoc,
       grDevices,
       sp,
-      igraph
+      igraph,
+      gridExtra
 Suggests: 
     knitr,
     rmarkdown,

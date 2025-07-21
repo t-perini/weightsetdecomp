@@ -16,9 +16,30 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(weightsetdecomp)
+library(gridExtra)
 ```
 
 ## Examples from Publication Perini 2025
+
+
+### Figure 1
+
+This introduces the basic visualizations created by this library: a weight set decomposition and its dual graph when aggregating multiple ranked lists using a weighted method. The dual graph visualization (right) is a simplification of the more complete weight set decomposition (left); however, it is generalizable to more than three input ranks/scores.
+
+```{r}
+Lambda <- weight_set(0.01)
+rankdf <- data.frame('risk1'=c(1,2,3,4,5), 
+           'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
+Lambda <- rank_aggregation_grid(Lambda,metrics=rankdf)
+outlist <- rank_decomposition_exact(input_data=rankdf,Lambda)
+g1 <- plot_aggregation_exact(Lambda,outlist,
+          with_lines=TRUE,with_points=FALSE,plotly_text=FALSE,leg.pos='left',random.color=0)
+g2 <- plot_ggnetwork_grid(Lambda, metrics=rankdf, node_size=20, node_label=TRUE,
+                    edge_size=1.5,random.color=0)
+grid.arrange(g1,g2,ncol=2)
+```
+
+
 
 ### Example 1.1
 
@@ -47,7 +68,7 @@ Computing all line segments results in the complete weight set decomposition.
 Lambda <- weight_set(0.01)
 rankdf <- data.frame('risk1'=c(1,2,3,4,5), 
            'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
-Lambda <- rank_aggregation_grid(Lambda,rankdf)
+Lambda <- rank_aggregation_grid(Lambda,metrics=rankdf)
 outlist <- rank_decomposition_exact(metrics,Lambda)
 Linedf <- outlist[[1]]
 # First, compare investments 1 and 2

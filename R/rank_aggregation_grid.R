@@ -7,6 +7,8 @@
 #' discovered. Smaller step size of the grid leads to capturing more indifference regions at
 #' the cost of additional computations. 
 #' 
+#' @param num_metrics The dimension of the problem indicating total number of metrics to be aggregated 
+#' (3, 4, or 5)
 #' @param Lambda Data frame containing weight vectors with column names lambda1, lambda2, lambda3
 #' @param metrics Data frame for 3 metrics, one metric per column, one row per item, smaller values are better
 #' @param ties Boolean for whether to allow for ties (TRUE) or not (FALSE)
@@ -20,7 +22,7 @@
 #' Lambda <- weight_set(0.1)
 #' metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
 #' Lambda <- rank_aggregation_grid(Lambda,metrics)
-rank_aggregation_grid <- function(Lambda,metrics,ties=FALSE,show_bar=FALSE) {
+rank_aggregation_grid <- function(num_metrics=3,Lambda,metrics,ties=FALSE,show_bar=FALSE) {
   rows=dim(Lambda)[1]
   if(show_bar) {# optional progress bar using utils
     print(paste("This may take some time. Weights to compute:",rows,". Estimated time:",round(0.001*rows,1),"seconds."))
@@ -30,7 +32,13 @@ rank_aggregation_grid <- function(Lambda,metrics,ties=FALSE,show_bar=FALSE) {
   Lambda$Item.Label = ""
   for(i in 1:rows) {
     # for every weight (row) in Lambda compute weighted sum of metrics, then rank and store labels
-    rating = Lambda$lambda1[i]*metrics[,1] + Lambda$lambda2[i]*metrics[,2] + Lambda$lambda3[i]*metrics[,3]
+    if(num_metrics==3) {
+      rating = Lambda$lambda1[i]*metrics[,1] + Lambda$lambda2[i]*metrics[,2] + Lambda$lambda3[i]*metrics[,3]
+    } else if(num_metrics==4) {
+      rating = Lambda$lambda1[i]*metrics[,1] + Lambda$lambda2[i]*metrics[,2] + Lambda$lambda3[i]*metrics[,3] + Lambda$lambda4[i]*metrics[,4]
+    } else if(num_metrics==5) {
+      rating = Lambda$lambda1[i]*metrics[,1] + Lambda$lambda2[i]*metrics[,2] + Lambda$lambda3[i]*metrics[,3] + Lambda$lambda4[i]*metrics[,4] + Lambda$lambda5[i]*metrics[,5]
+    }
     rr = flex_rank(rating, ties)
     Lambda$Rank.Label[i] = paste(rr,collapse = ".")
     Lambda$Item.Label[i] = paste(order(rr),collapse = ".")

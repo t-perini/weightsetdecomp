@@ -24,8 +24,8 @@
 #' Lambda <- rank_aggregation_grid(Lambda,metrics)
 rank_aggregation_grid <- function(num_metrics=3,Lambda,metrics,ties=FALSE,show_bar=FALSE) {
   rows=dim(Lambda)[1]
+  print(paste("This may take some time. Weights to compute:",rows,". Estimated time:",round(0.001*rows,1),"seconds."))
   if(show_bar) {# optional progress bar using utils
-    print(paste("This may take some time. Weights to compute:",rows,". Estimated time:",round(0.001*rows,1),"seconds."))
     pb <- utils::txtProgressBar(width=20,style=3)
   } 
   Lambda$Rank.Label = ""

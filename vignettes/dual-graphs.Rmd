@@ -1,0 +1,87 @@
+---
+title: "dual-graphs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{dual-graphs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(weightsetdecomp)
+```
+
+## Dual Graphs generated for Publication Perini 2025
+
+
+### M=3 Input Metrics
+
+The most basic functionality is for 3 input metrics, whose dual graphs can be plotted as either a right or equilateral triangle, just like the weight set. Each IR is represented as a node, and the location per node is computed as the average x- and y-position of the corresponding weight set representation. Use the following chunk of code to test the cases for 3 input metrics. 
+
+```{r}
+set.seed(1)
+M = 3 # number of input metrics
+correlated = TRUE # whether metrics should be mutually correlated
+n = 50 # number of investments
+eps = 0.01 # step size for grid search
+Lambda <- weight_set(num_metrics=M, stepsize=eps)
+if(correlated) {
+  metrics <- data.frame('risk1'= round(rnorm(n,mean=20,sd=2),1))
+  metrics$risk2 = metrics$risk1 + round(rnorm(n,mean=0,sd=1),1)
+  metrics$risk3 = metrics$risk1 + round(rnorm(n,mean=0,sd=1),1)
+} else {
+  metrics <- data.frame('risk1'= round(rnorm(n),1),'risk2'= round(rnorm(n),1),'risk3'= round(rnorm(n),1))
+}
+cor(metrics)
+  
+Lambda <- rank_aggregation_grid(num_metrics = M, Lambda, metrics)
+Lambda <- rank_topalpha_grid(Lambda, alpha=5, metrics=metrics)
+print(paste('For M =',M,', correlated =',correlated,', n =',n,', stepsize =',eps,':'))
+print(paste('number of total IRs =',length(levels(Lambda$Rank.Label))))
+print(paste('number of top-5 regions =',length(levels(Lambda$TopAlpha))))
+plot_aggregation_grid(Lambda,bias_axes=FALSE,annotations=TRUE,leg.pos='none',random.color=0)
+outlist <- plot_network_grid(num_metrics=M,Lambda,metrics,node_size=1,node_label=FALSE,edge_size=1,triangle="equilateral",leg.pos='none',show_bar=TRUE)
+adj <- outlist[[2]]
+print(paste('number of IR adjacencies =',dim(adj)[1]))
+```
+
+Use the next chunk of code to test the functionality for 4 input metrics. 
+
+```{r}
+set.seed(1)
+M = 4 # number of input metrics
+correlated = TRUE # whether metrics should be mutually correlated
+n = 10 # number of investments
+eps = 0.01 # step size for grid search
+Lambda <- weight_set(num_metrics=M, stepsize=eps)
+if(correlated) {
+  metrics <- data.frame('risk1'= round(rnorm(n,mean=20,sd=2),1))
+  metrics$risk2 = metrics$risk1 + round(rnorm(n,mean=0,sd=1),1)
+  metrics$risk3 = metrics$risk1 + round(rnorm(n,mean=0,sd=1),1)
+  metrics$risk4 = metrics$risk1 + round(rnorm(n,mean=0,sd=1),1)
+} else {
+  metrics <- data.frame('risk1'= round(rnorm(n),1),'risk2'= round(rnorm(n),1),'risk3'= round(rnorm(n),1),'risk4'= round(rnorm(n),1))
+}
+cor(metrics)
+sort(unique(as.vector(cor(metrics))))  
+Lambda <- rank_aggregation_grid(num_metrics = M, Lambda, metrics)
+Lambda <- rank_topalpha_grid(Lambda, alpha=5, metrics=metrics)
+print(paste('For M =',M,', correlated =',correlated,', n =',n,', stepsize =',eps,':'))
+print(paste('number of total IRs =',length(levels(Lambda$Rank.Label))))
+print(paste('number of top-5 regions =',length(levels(Lambda$TopAlpha))))
+#plot_aggregation_grid(Lambda,bias_axes=FALSE,annotations=TRUE,leg.pos='none',random.color=0)
+outlist <- plot_network_grid(num_metrics=M,Lambda,metrics,node_size=1,node_label=FALSE,edge_size=1,leg.pos='none',show_bar=TRUE)
+adj <- outlist[[2]]
+print(paste('number of IR adjacencies =',dim(adj)[1]))
+```
+
+
+
+

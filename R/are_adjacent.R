@@ -3,6 +3,8 @@
 #' Uses tests for adjacency to determine if rank aggregations have adjacent indifference regions. 
 #' The 'basic' test uses Rank.Label and returns true if all pairs of transpositions are adjacent and degenerate.  
 #'
+#' @param num_metrics The dimension of the problem indicating total number of metrics to be aggregated 
+#' (3, 4, or 5)
 #' @param label1 String for the first ranked list
 #' @param label2 String for the second ranked list
 #' @param metrics Data frame for 3 metrics, one metric per column, one row per item, smaller values are better.
@@ -18,9 +20,9 @@
 #' metrics <- data.frame('risk1'=c(1,2,3,4,5), 
 #'            'risk2'=c(1,2,3,4,5), 'risk3'=c(1,3,2,5,4))
 #' are_adjacent('1.2.3.4.5', '1.3.2.5.4', metrics)
-are_adjacent <- function(label1,label2,metrics,test='basic') {
+are_adjacent <- function(num_metrics=3,label1,label2,metrics,test='basic') {
   if(test=='basic') {
-    # transrom Rank.Label string into list of numeric
+    # transform Rank.Label string into list of numeric
     parsed1 = as.numeric(unlist(strsplit(as.character(label1),'.',fixed=TRUE)))
     parsed2 = as.numeric(unlist(strsplit(as.character(label2),'.',fixed=TRUE)))
     # identify number and indices of differences between ranks
@@ -40,11 +42,18 @@ are_adjacent <- function(label1,label2,metrics,test='basic') {
       # all the following ratios should equal the same constant
       item_pair1 = c(which(parsed1==position_pair1[1]),which(parsed1==position_pair1[2]))
       item_pair2 = c(which(parsed1==position_pair2[1]),which(parsed1==position_pair2[2]))
-      constant = (metrics[item_pair1[1],1] - metrics[item_pair1[2],1])/(metrics[item_pair2[1],1] - metrics[item_pair2[2],1])
-      if(constant != (metrics[item_pair1[1],2] - metrics[item_pair1[2],2])/(metrics[item_pair2[1],2] - metrics[item_pair2[2],2])) 
-        return(FALSE)
-      if(constant != (metrics[item_pair1[1],3] - metrics[item_pair1[2],3])/(metrics[item_pair2[1],3] - metrics[item_pair2[2],3])) 
-        return(FALSE)
+      numerator = (metrics[item_pair1[1],1] - metrics[item_pair1[2],1])
+      denominator = (metrics[item_pair2[1],1] - metrics[item_pair2[2],1]) 
+      constant = numerator/denominator
+      for(j in 2:num_metrics) {
+        num = (metrics[item_pair1[1],j] - metrics[item_pair1[2],j])
+        den = (metrics[item_pair2[1],j] - metrics[item_pair2[2],j])
+        # both denominators = 0 passes
+        if(denominator==0 && den==0) next 
+        # if only one denominator = 0 fails
+        if(denominator==0 || den==0) return(FALSE)
+        if(constant != num/den) return(FALSE)
+      }
       # passed basic test!
       return(TRUE)
     } else {

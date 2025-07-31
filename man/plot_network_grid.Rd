@@ -5,16 +5,21 @@
 \title{Plot the network representation of weight set decomposition based on grid search}
 \usage{
 plot_network_grid(
+  num_metrics = 3,
   Lambda,
   metrics,
   node_size = 15,
   node_label = FALSE,
   edge_size = 1,
   triangle = "equilateral",
-  leg.pos = "none"
+  leg.pos = "none",
+  show_bar = FALSE
 )
 }
 \arguments{
+\item{num_metrics}{The dimension of the problem indicating total number of metrics to be aggregated
+(3, 4, or 5)}
+
 \item{Lambda}{Data frame containing weight vectors and labels for weighted rank aggregations.
 Must include column names lambda1/2 for right triangle representation or
 equilambda1/2 for equilateral triangle representation.
@@ -30,6 +35,8 @@ Must include column name Label for the string/factor identifier of the rank aggr
 right triangle representation ("right") or the equilateral triangle representation ("equilateral").}
 
 \item{leg.pos}{Input for ggplot legend positioning, e.g. 'bottom', 'right', or c(0.8,0.8)}
+
+\item{show_bar}{Boolean for a progress bar printed in console}
 }
 \value{
 A list of 3 output used to construct the network: list of nodes, edges, and positions of nodes
@@ -39,11 +46,11 @@ Plot the dual graph of the weight set decomposition, where nodes indicate indiff
 edges represent adjacency. Computed based on the grid search.
 }
 \examples{
-Lambda <- weight_set(0.01)
+Lambda <- weight_set()
 metrics <- data.frame('risk1'=c(1,2,3,4,5), 
                      'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
-Lambda <- rank_aggregation_grid(Lambda,metrics)
+Lambda <- rank_aggregation_grid(3,Lambda,metrics)
 plot_aggregation_grid(Lambda,leg.pos='bottom')
-plot_network_grid(Lambda, metrics, node_label=TRUE)
-plot_network_grid(Lambda, metrics, node_size=5, node_label=FALSE, triangle='right')
+outlist <- plot_network_grid(3, Lambda, metrics, node_label=TRUE)
+outlist <- plot_network_grid(3, Lambda, metrics, node_size=12, node_label=FALSE, triangle='right')
 }

@@ -30,7 +30,7 @@ set.seed(1)
 M = 3 # number of input metrics
 correlated = TRUE # whether metrics should be mutually correlated
 n = 50 # number of investments
-eps = 0.01 # step size for grid search
+eps = 0.1 # step size for grid search
 Lambda <- weight_set(num_metrics=M, stepsize=eps)
 if(correlated) {
   metrics <- data.frame('risk1'= round(rnorm(n,mean=20,sd=2),1))
@@ -59,7 +59,7 @@ set.seed(1)
 M = 4 # number of input metrics
 correlated = TRUE # whether metrics should be mutually correlated
 n = 10 # number of investments
-eps = 0.01 # step size for grid search
+eps = 0.1 # step size for grid search
 Lambda <- weight_set(num_metrics=M, stepsize=eps)
 if(correlated) {
   metrics <- data.frame('risk1'= round(rnorm(n,mean=20,sd=2),1))

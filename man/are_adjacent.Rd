@@ -4,9 +4,12 @@
 \alias{are_adjacent}
 \title{Determine if two rankings are adjacent in the decomposition}
 \usage{
-are_adjacent(label1, label2, metrics, test = "basic")
+are_adjacent(num_metrics = 3, label1, label2, metrics, test = "basic")
 }
 \arguments{
+\item{num_metrics}{The dimension of the problem indicating total number of metrics to be aggregated
+(3, 4, or 5)}
+
 \item{label1}{String for the first ranked list}
 
 \item{label2}{String for the second ranked list}
@@ -25,9 +28,9 @@ The 'basic' test uses Rank.Label and returns true if all pairs of transpositions
 \examples{
 metrics <- data.frame('risk1'=c(1,2,3,4,5), 
            'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
-are_adjacent('1.2.3.4.5', '1.3.2.4.5', metrics)
-are_adjacent('1.2.3.4.5', '1.3.2.5.4', metrics)
+are_adjacent(num_metrics=3,'1.2.3.4.5', '1.3.2.4.5', metrics)
+are_adjacent(num_metrics=3,'1.2.3.4.5', '1.3.2.5.4', metrics)
 metrics <- data.frame('risk1'=c(1,2,3,4,5), 
            'risk2'=c(1,2,3,4,5), 'risk3'=c(1,3,2,5,4))
-are_adjacent('1.2.3.4.5', '1.3.2.5.4', metrics)
+are_adjacent(num_metrics=3,'1.2.3.4.5', '1.3.2.5.4', metrics)
 }

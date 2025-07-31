@@ -9,7 +9,7 @@
 #' @export 
 #'
 #' @examples 
-#' Lambda <- weight_set(0.5)
+#' Lambda <- weight_set(stepsize=0.5)
 #' weight <- c(0.1,0,0.9, -0.4, 0)
 #' Lambda <- AddIfUnique(Lambda, weight)
 AddIfUnique <- function(df,row) {

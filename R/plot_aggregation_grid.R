@@ -27,9 +27,9 @@
 #' @export
 #' 
 #' @examples 
-#' Lambda <- weight_set(0.01)
+#' Lambda <- weight_set()
 #' metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
-#' Lambda <- rank_aggregation_grid(Lambda,metrics)
+#' Lambda <- rank_aggregation_grid(3,Lambda,metrics)
 #' plot_aggregation_grid(Lambda)
 #' g <- plot_aggregation_grid(Lambda,by='Item.Label')
 #' g

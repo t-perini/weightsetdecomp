@@ -27,7 +27,7 @@ relabeled according to their top-alpha items. Note that if Rank.Label is not pro
 input data frame, then they will first be computed (without ties).
 }
 \examples{
-Lambda <- weight_set(0.1)
+Lambda <- weight_set(stepsize=0.1)
 metrics <- data.frame('cost'=c(10,20,30,40,50), 
            'time'=c(5.9, 3.3, 2.5, 4.1, 1.8), 'risk'=c(1,4,3,2,5))
 Lambda <- rank_topalpha_grid(Lambda, alpha=3, metrics=metrics)

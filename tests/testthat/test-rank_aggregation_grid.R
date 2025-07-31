@@ -1,6 +1,6 @@
 test_that("rank_aggregation_grid gives correct output", {
-  Lambda <- weight_set(0.5)
+  Lambda <- weight_set(stepsize=0.5)
   metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
-  Lambda <- rank_aggregation_grid(Lambda,metrics)
+  Lambda <- rank_aggregation_grid(3,Lambda,metrics)
   expect_equal(as.character(Lambda$Item.Label[6]), '3.2.4.1')
 })

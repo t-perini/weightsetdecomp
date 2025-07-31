@@ -41,9 +41,9 @@ Smaller step size of the grid leads to capturing more indifference regions (with
 estimation of area) at the cost of slower computations.
 }
 \examples{
-Lambda <- weight_set(0.01)
+Lambda <- weight_set()
 metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
-Lambda <- rank_aggregation_grid(Lambda,metrics)
+Lambda <- rank_aggregation_grid(3,Lambda,metrics)
 outlist <- plot_histogram_grid(Lambda)
 outlist[[1]] # for ggplot
 outlist[[2]] # for data frame

@@ -19,7 +19,9 @@
 #' @export 
 #' 
 #' @examples
-#' Lambda <- weight_set() 
+#' Lambda <- weight_set()
+#' Lambda <- weight_set(stepsize=0.05)
+#' Lambda <- weight_set(num_metrics=4) 
 weight_set <- function(num_metrics=3, stepsize=0.01, equilateral=TRUE) {
   s = seq(0,1,stepsize)
   

@@ -35,10 +35,10 @@ plot the area of each
 indifference region as a percentage of the entire weight set.
 }
 \examples{
-Lambda <- weight_set(0.1)
+Lambda <- weight_set(stepsize=0.1)
 rankdf <- data.frame('rank1'=c(1,2,3,4,5), 
            'rank2'=c(2,3,1,5,4), 'rank3'=c(3,1,5,4,2))
-Lambda <- Lambda <- rank_aggregation_grid(Lambda,rankdf)
+Lambda <- Lambda <- rank_aggregation_grid(3,Lambda,rankdf)
 inputlist <- rank_decomposition_exact(rankdf,Lambda)
 IR_hull <- inputlist[[4]]
 outlist <- plot_histogram_exact(IR_hull)

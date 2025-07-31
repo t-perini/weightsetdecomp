@@ -49,9 +49,9 @@ A ggplot structure which can be plotted directly.
 Choose one of the items to show the item's ranked position for all weights in the weight set grid.
 }
 \examples{
-Lambda <- weight_set(0.01)
+Lambda <- weight_set()
 metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
-Lambda <- rank_aggregation_grid(Lambda,metrics)
+Lambda <- rank_aggregation_grid(3,Lambda,metrics)
 plot_position_grid(Lambda,item=1)
 g <- plot_position_grid(Lambda,item=1,leg.pos='bottom')
 g

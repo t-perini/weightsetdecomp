@@ -49,7 +49,7 @@ The top-alpha region for the given ranked order (or containing the weight vector
 will be plotted in the weight set.
 }
 \examples{
-Lambda <- weight_set(0.01)
+Lambda <- weight_set()
 metrics <- data.frame('cost'=c(10,20,30,40,50), 
            'time'=c(5.9, 3.3, 2.5, 4.1, 1.8), 'risk'=c(1,4,3,2,5))
 Lambda <- rank_topalpha_grid(Lambda, alpha=3, metrics=metrics)

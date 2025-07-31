@@ -20,10 +20,10 @@
 #' @export
 #' 
 #' @examples 
-#' Lambda <- weight_set(0.01)
+#' Lambda <- weight_set()
 #' metrics <- data.frame('risk1'=c(1,2,3,4,5), 
 #'                      'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
-#' Lambda <- rank_aggregation_grid(Lambda,metrics)
+#' Lambda <- rank_aggregation_grid(3,Lambda,metrics)
 #' plot_aggregation_grid(Lambda,leg.pos='bottom')
 #' plot_ggnetwork_grid(Lambda, metrics,leg.pos='bottom')
 #' plot_ggnetwork_grid(Lambda, metrics, node_size=20, node_label=TRUE, edge_size=1.5)
@@ -46,14 +46,14 @@ plot_ggnetwork_grid <- function(Lambda,metrics,node_size=10,node_label=FALSE,edg
   #positions_matrix = as.matrix(positions[,c('xpos','ypos')])
   # data frame for edges
   edges <- data.frame(i='none',j='none',ix=0,iy=0,jx=0,jy=0)
-  for(l1 in 1:(n-1)) {
-    for(l2 in l1:n) {
-      i=level_library[l1]
-      j=level_library[l2]
-      if(are_adjacent(i,j,metrics)) {
-        edges <- rbind(edges,data.frame(i=i,j=j,
-                                        ix=positions$xpos[l1],iy=positions$ypos[l1],
-                                        jx=positions$xpos[l2],jy=positions$ypos[l2]))
+  for(i in 1:(n-1)) {
+    for(j in (i+1):n) {
+      l1=level_library[i]
+      l2=level_library[j]
+      if(are_adjacent(num_metrics=3,l1,l2,metrics)) {
+        edges <- rbind(edges,data.frame(i=l1,j=l2,
+                                        ix=positions$xpos[i],iy=positions$ypos[i],
+                                        jx=positions$xpos[j],jy=positions$ypos[j]))
       }
     }
   }
@@ -74,7 +74,7 @@ plot_ggnetwork_grid <- function(Lambda,metrics,node_size=10,node_label=FALSE,edg
   
   # nodes and edges
   g <- g + 
-    ggplot2::geom_segment(data=edges,ggplot2::aes(x = ix, y = iy, xend = jx, yend = jy), color="gray", size=edge_size) + 
+    ggplot2::geom_segment(data=edges,ggplot2::aes(x = ix, y = iy, xend = jx, yend = jy), color="grey", size=edge_size) + 
     ggplot2::geom_point(data=positions, ggplot2::aes(x=xpos,y=ypos,color=Rank.Label),size=node_size) 
   # optional node labels
   if(node_label) {

@@ -20,6 +20,6 @@ Note equilambda1 is centered at 0, so it is expected to have negative values.
 These weights are recommended for less biased visualizations.
 }
 \examples{
-Lambda1 <- weight_set(0.01)
+Lambda1 <- weight_set()
 Lambda2 <- equi_transform(Lambda1)
 }

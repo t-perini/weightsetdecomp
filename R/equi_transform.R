@@ -11,7 +11,7 @@
 #' @export 
 #' 
 #' @examples 
-#' Lambda1 <- weight_set(0.01)
+#' Lambda1 <- weight_set()
 #' Lambda2 <- equi_transform(Lambda1)
 equi_transform <- function(Lambda) {
   Lambda$equilambda1 <- Lambda$lambda1-0.5*(1-Lambda$lambda2)

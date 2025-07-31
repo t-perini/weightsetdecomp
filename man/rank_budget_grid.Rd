@@ -29,7 +29,7 @@ relabeled according to the items in the solution. Note that if Rank.Label is not
 input data frame, then they will first be computed (without ties).
 }
 \examples{
-Lambda <- weight_set(0.01)
+Lambda <- weight_set()
 metrics <- data.frame('risk1'=c(1,2,3,4,5), 
            'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
 costs <- c(4.1, 4.4, 2.2, 5.5, 3.6 )

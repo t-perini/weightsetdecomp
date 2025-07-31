@@ -20,8 +20,8 @@ indifference regions tend to have the same color. By randomizing the order, the 
 more randomized and distinguishable. Recommended use for Lambda$Rank.Label or Lambda$TopAlpha.
 }
 \examples{
-Lambda <- weight_set(0.01)
+Lambda <- weight_set()
 metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
-Lambda <- rank_aggregation_grid(Lambda,metrics)
+Lambda <- rank_aggregation_grid(3,Lambda,metrics)
 Lambda$Rank.Label <- randomize_labels(Lambda$Rank.Label)
 }

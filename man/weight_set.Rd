@@ -4,9 +4,12 @@
 \alias{weight_set}
 \title{Initialize the data frame for weights in weight set}
 \usage{
-weight_set(stepsize = 0.01, equilateral = TRUE)
+weight_set(num_metrics = 3, stepsize = 0.01, equilateral = TRUE)
 }
 \arguments{
+\item{num_metrics}{The dimension of the problem indicating total number of metrics to be aggregated
+(3, 4, or 5)}
+
 \item{stepsize}{The step size for the grid of equally spaced points.
 Smaller values will increase precision but requires more time for computation.
 Weights are between 0 and 1 with sum of 1.}
@@ -27,5 +30,7 @@ These weights may also be used for visualization (lambda1 and lambda2 only), but
 is a biased representation since the distance between vertices of the triangle are not uniform.
 }
 \examples{
-Lambda <- weight_set() 
+Lambda <- weight_set()
+Lambda <- weight_set(stepsize=0.05)
+Lambda <- weight_set(num_metrics=4) 
 }

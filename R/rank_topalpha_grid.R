@@ -15,7 +15,7 @@
 #' the top ranked items (ordered numerically not by rank)
 #' @export
 #' @examples 
-#' Lambda <- weight_set(0.1)
+#' Lambda <- weight_set(stepsize=0.1)
 #' metrics <- data.frame('cost'=c(10,20,30,40,50), 
 #'            'time'=c(5.9, 3.3, 2.5, 4.1, 1.8), 'risk'=c(1,4,3,2,5))
 #' Lambda <- rank_topalpha_grid(Lambda, alpha=3, metrics=metrics)

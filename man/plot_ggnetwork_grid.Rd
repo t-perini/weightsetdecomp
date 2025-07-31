@@ -43,10 +43,10 @@ Plot the dual graph of the weight set decomposition, where nodes indicate indiff
 edges represent adjacency. Computed based on the grid search.
 }
 \examples{
-Lambda <- weight_set(0.01)
+Lambda <- weight_set()
 metrics <- data.frame('risk1'=c(1,2,3,4,5), 
                      'risk2'=c(2,3,1,5,4), 'risk3'=c(3,1,5,4,2))
-Lambda <- rank_aggregation_grid(Lambda,metrics)
+Lambda <- rank_aggregation_grid(3,Lambda,metrics)
 plot_aggregation_grid(Lambda,leg.pos='bottom')
 plot_ggnetwork_grid(Lambda, metrics,leg.pos='bottom')
 plot_ggnetwork_grid(Lambda, metrics, node_size=20, node_label=TRUE, edge_size=1.5)

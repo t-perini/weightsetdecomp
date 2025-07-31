@@ -26,10 +26,10 @@
 #' @export
 #' 
 #' @examples 
-#' Lambda <- weight_set(0.01)
+#' Lambda <- weight_set()
 #' rankdf <- data.frame('rank1'=c(1,2,3,4,5), 
 #'            'rank2'=c(2,3,1,5,4), 'rank3'=c(3,1,5,4,2))
-#' Lambda <- rank_aggregation_grid(Lambda,rankdf)
+#' Lambda <- rank_aggregation_grid(3,Lambda,rankdf)
 #' inputlist <- rank_decomposition_exact(rankdf,Lambda)
 #' plot_aggregation_exact(Lambda,inputlist)
 #' plot_aggregation_exact(Lambda,inputlist,

@@ -29,9 +29,9 @@
 #' @export
 #' 
 #' @examples 
-#' Lambda <- weight_set(0.1)
+#' Lambda <- weight_set()
 #' metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
-#' Lambda <- rank_aggregation_grid(Lambda,metrics)
+#' Lambda <- rank_aggregation_grid(3,Lambda,metrics)
 #' plot_IR_grid(Lambda,weight=c(0.2,0.2,0.6))
 #' plot_IR_grid(Lambda,rank.label='1.2.3.4')
 #' g <- plot_IR_grid(Lambda,item.label='1.3.2.4')

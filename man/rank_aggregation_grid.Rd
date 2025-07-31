@@ -4,9 +4,18 @@
 \alias{rank_aggregation_grid}
 \title{Weighted rank aggregation via uniform grid search over weight set}
 \usage{
-rank_aggregation_grid(Lambda, metrics, ties = FALSE, show_bar = FALSE)
+rank_aggregation_grid(
+  num_metrics = 3,
+  Lambda,
+  metrics,
+  ties = FALSE,
+  show_bar = FALSE
+)
 }
 \arguments{
+\item{num_metrics}{The dimension of the problem indicating total number of metrics to be aggregated
+(3, 4, or 5)}
+
 \item{Lambda}{Data frame containing weight vectors with column names lambda1, lambda2, lambda3}
 
 \item{metrics}{Data frame for 3 metrics, one metric per column, one row per item, smaller values are better}
@@ -30,7 +39,8 @@ discovered. Smaller step size of the grid leads to capturing more indifference r
 the cost of additional computations.
 }
 \examples{
-Lambda <- weight_set(0.1)
+Lambda <- weight_set()
 metrics <- data.frame('cost'=c(10,20,30,40), 'time'=c(5.9, 3.3, 2.5, 4.1), 'risk'=c(1,4,3,2))
-Lambda <- rank_aggregation_grid(Lambda,metrics)
+Lambda <- rank_aggregation_grid(3,Lambda,metrics)
+Lambda <- rank_aggregation_grid(Lambda = Lambda, metrics = metrics)
 }

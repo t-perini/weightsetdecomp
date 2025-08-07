@@ -98,22 +98,46 @@ plot_network_grid <- function(num_metrics=3,Lambda,metrics,node_size=15,node_lab
   network <- igraph::graph_from_data_frame(adj,directed=FALSE,vertices=level_library)
   # report number of connected components
   print(paste('Connected components:',igraph::count_components(network)))
-  # custom labels for extreme points only
+  # custom labels, node sizes, etc. 
   custom_vlabels <- c()
+  custom_size <- c()
+  #custom_color <- c()
   for(lab in igraph::V(network)$name) {
     if(lab%in%extreme_labels) {
       r_i <- paste0('r',which(lab==extreme_labels))
       custom_vlabels <- c(custom_vlabels,r_i)
+      custom_size <- c(custom_size,15)
     } else {
       custom_vlabels <- c(custom_vlabels,NA)
+      custom_size <- c(custom_size,node_size)
     }
+    # if(node_color=='volume') {
+    #   # the percentage of weights assigned to this label
+    #   custom_color <- c(custom_color,100*sum(Lambda$Rank.Label==lab)/dim(Lambda)[1])
+    # }
+    # if(node_color=='bias') {
+    #   # the most extreme (largest) weight in the IR
+    #   subdf <- subset(Lambda, Rank.Label==lab)
+    #   if(num_metrics==3) bias = max(max(subdf$lamdba1),max(subdf$lamdba2),max(subdf$lamdba3))
+    #   if(num_metrics==4) bias = max(max(subdf$lamdba1),max(subdf$lamdba2),max(subdf$lamdba3),max(subdf$lamdba4))
+    #   custom_color <- c(custom_color,bias)
+    # }
+    # if(node_color=='equity') {
+    #   # the shortest distance to central weight
+    #   subdf <- subset(Lambda, Rank.Label==lab)
+    #   if(num_metrics==3) subdf$dist <- (subdf$lamdba1-1/3)^2 + (subdf$lamdba2-1/3)^2 + (subdf$lamdba3-1/3)^2
+    #   if(num_metrics==4) subdf$dist <- (subdf$lamdba1-1/4)^2 + (subdf$lamdba2-1/4)^2 + (subdf$lamdba3-1/4)^2 + (subdf$lamdba4-1/4)^2
+    #   subdf$dist <- sqrt(subdf$dist)
+    #   custom_color <- c(custom_color,min(subdf$dist))
+    # }
   }
-  if(num_metrics>3) {
-    plot(network,layout=positions_matrix,vertex.size=node_size,frame.color=NA,vertex.label=custom_vlabels)
-  } else if(node_label==TRUE) {
-    plot(network,layout=positions_matrix,vertex.size=node_size,frame.color=NA)
+  #if(num_metrics>3) {
+  #  plot(network,layout=positions_matrix,vertex.size=custom_size,frame.color=NA,vertex.label=custom_vlabels)
+  #} else 
+  if(node_label==TRUE) {
+    plot(network,layout=positions_matrix,vertex.size=custom_size,frame.color=NA)
   } else {
-    plot(network,layout=positions_matrix,vertex.size=node_size,frame.color=NA,vertex.label=custom_vlabels)
+    plot(network,layout=positions_matrix,vertex.size=custom_size,vertex.label=custom_vlabels,frame.color=NA)
   }
   return(list(level_library,adj,positions,network))
 }

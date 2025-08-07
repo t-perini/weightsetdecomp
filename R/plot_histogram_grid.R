@@ -70,6 +70,6 @@ plot_histogram_grid <- function(Lambda,orientation='horizontal',min_threshold=0,
       g<- g+ ggplot2::theme(axis.text.x = ggplot2::element_blank())
     }
   }
-  
+  g
   return(list(g,Areadf))
 }

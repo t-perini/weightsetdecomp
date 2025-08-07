@@ -73,6 +73,6 @@ plot_histogram_exact <- function(IR_hull,orientation='horizontal',min_threshold=
       g<- g+ ggplot2::theme(axis.text.x = ggplot2::element_blank())
     }
   }
-  
+  g
   return(list(g,Areadf))
 }
